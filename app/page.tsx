@@ -3,28 +3,20 @@
 import React from "react";
 import { Card } from "@heroui/react";
 import {
-  Activity,
-  AlertTriangle,
   ArrowUpRight,
   Bot,
   CheckCircle2,
   ChevronRight,
   CircleDollarSign,
   Clock3,
-  Cpu,
-  FileText,
-  Gauge,
-  GitBranch,
   HeartPulse,
   LayoutDashboard,
   ListChecks,
   LockKeyhole,
-  RadioTower,
   ScrollText,
   Server,
   ShieldCheck,
   Sparkles,
-  TerminalSquare,
 } from "lucide-react";
 import {
   agentRows,
