@@ -169,6 +169,45 @@ export const sidebarStats = [
   { label: "Serviços", value: "5", icon: TerminalSquare },
 ];
 
+export interface GatewayResourceMetrics {
+  pid: string;
+  memoryCurrent: string;
+  memoryHigh: string;
+  memoryMax: string;
+  tasksCurrent: string;
+  tasksMax: string;
+  nRestarts: string;
+  healthLatencyMs: string;
+  healthEndpoint: string;
+}
+
+export interface PortSummary {
+  port: string;
+  bind: string;
+  process: string;
+  exposure: string;
+}
+
+export const gatewayDetails: GatewayResourceMetrics = {
+  pid: "3332914",
+  memoryCurrent: "892 MB",
+  memoryHigh: "1.1 GB",
+  memoryMax: "2.73 GB",
+  tasksCurrent: "257",
+  tasksMax: "1200",
+  nRestarts: "0",
+  healthLatencyMs: "12",
+  healthEndpoint: "http://127.0.0.1:18789/health",
+};
+
+export const portSummaries: PortSummary[] = [
+  { port: "18789", bind: "127.0.0.1", process: "openclaw-gateway", exposure: "loopback" },
+  { port: "18800", bind: "127.0.0.1", process: "chrome-cdp", exposure: "loopback" },
+  { port: "3100", bind: "127.0.0.1", process: "next-dashboard", exposure: "loopback" },
+  { port: "8080", bind: "0.0.0.0", process: "evolution-api", exposure: "public" },
+  { port: "80", bind: "0.0.0.0", process: "nginx", exposure: "public" },
+];
+
 export interface AgentDetail {
   name: string;
   modelId: string;
