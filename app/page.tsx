@@ -427,6 +427,26 @@ export default function Home() {
             <LogsPanel />
             <PlanPanel />
 
+            <section id="design-system" className="space-y-5">
+              <SectionTitle eyebrow="Design system" title="Baisync-like UI harness" description="Tokens e regras visuais versionadas para manter o dashboard consistente." icon={Sparkles} />
+              <Card className="p-4">
+                <Card.Content className="grid gap-4 p-0 md:grid-cols-3">
+                  <div className="rounded-[14px] border border-border-dim bg-dim/50 p-3">
+                    <p className="text-sm text-heading" style={mono}>Superfícies</p>
+                    <p className="mt-2 text-xs text-subtle">bg-app, bg-surface, glass-card, orbs laranja e bordas discretas.</p>
+                  </div>
+                  <div className="rounded-[14px] border border-border-dim bg-dim/50 p-3">
+                    <p className="text-sm text-heading" style={mono}>Controles</p>
+                    <p className="mt-2 text-xs text-subtle">btn-neu, btn-neu-ghost, sidebar-item-active e foco com accent laranja.</p>
+                  </div>
+                  <div className="rounded-[14px] border border-border-dim bg-dim/50 p-3">
+                    <p className="text-sm text-heading" style={mono}>Agentes</p>
+                    <p className="mt-2 text-xs text-subtle">AGENTS.md + skills locais obrigam UI consistente e coleta segura.</p>
+                  </div>
+                </Card.Content>
+              </Card>
+            </section>
+
             <section id="coleta-segura" className="pb-8">
               <Card className="p-4">
                 <Card.Content className="flex flex-col gap-4 p-0 md:flex-row md:items-center md:justify-between">
