@@ -172,7 +172,7 @@ export const stateCards = [
   {
     label: "Notes errors",
     value: "9",
-    detail: "Contador agregado em state; sem log bruto exposto",
+    detail: "Contador agregado do fluxo Notes",
     icon: AlertTriangle,
     tone: "warn" as HealthTone,
   },
