@@ -57,7 +57,7 @@ A change is not complete until these checks pass:
    - unauthenticated `GET /` redirects to `/login`;
    - `/login` renders the login form;
    - valid credentials reach `/`;
-   - dashboard shows `OpenClaw Operations`, `Gateway`, `Logs`, and `Agentes`;
+   - dashboard shows `Visão Geral`, `Gateway`, `Logs`, and `Agentes`;
    - logout returns to `/login`.
 7. Runtime through Nginx:
    - `curl -I http://54.175.2.242/` returns a redirect to `/login` when unauthenticated;
@@ -77,11 +77,13 @@ Follow Baisync dashboard structure:
 - mono labels and numbers;
 - HeroUI v3 components with local classes.
 
-Sidebar items should stay operational and short: `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`, `Plano`.
+Sidebar items should stay operational and short: `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`.
+Header must match the Baisync dashboard pattern: `Painel` on the left with a mobile hamburger drawer toggle; only notification and profile icons on the right. Do not put gateway/IP/logout/status chips in the navbar.
+On mobile, keep the navbar accessible: hamburger button opens a fixed left sidebar drawer with a dark translucent backdrop and closes on backdrop or nav-link click.
 
 ## Copy Standard
 
-Avoid generic AI/SaaS language. Do not add badges such as `sem segredos`, `sem PII`, or `sem logs brutos` to the UI. Keep privacy and data-safety requirements in docs/skills and show operational data in the product.
+Avoid generic AI/SaaS language. Do not add badges such as `sem segredos`, `sem PII`, or `sem logs brutos` to the UI. Do not use visible status chips such as `Gateway 200`, `OK`, or `Atenção`; use compact top-right icons and concrete body text instead. Keep privacy and data-safety requirements in docs/skills and show operational data in the product.
 
 ## Deployment Notes
 

@@ -1,7 +1,7 @@
 ---
 name: ui-design
 description: Use before editing OpenClaw dashboard UI. Enforces HeroUI v3 usage, Baisync-inspired visual language, operational copy, anti-AI-slop standards, and browser validation.
-version: 1.1.0
+version: 1.2.0
 author: Hermes Agent
 license: Proprietary
 metadata:
@@ -31,6 +31,13 @@ Before adding or changing a HeroUI component, open the relevant HeroUI v3 docs:
   - Progress: https://heroui.com/docs/react/components/progress.mdx
 
 Use HeroUI v3 patterns only. Do not use HeroUI v2 assumptions.
+
+When changing prompt/copy/design instructions, use OpenAI's instruction-writing guidance as the reference model:
+
+- Prompt engineering guide: https://developers.openai.com/api/docs/guides/prompt-engineering
+- Help Center best practices: https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api
+
+Apply the same principles to UI copy: put the instruction/purpose first, separate context from output, be specific about format and style, show acceptable examples, and avoid fluffy or imprecise descriptions.
 
 ## Component Rules
 
@@ -65,10 +72,19 @@ Apply it to headings, sidebar items, table headers, metric labels, IDs, timestam
 ## Layout
 
 - Fixed full-height shell: left sidebar + content column.
-- Sidebar labels should be operational and short: `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`, `Plano`.
-- Header height: 56px, sticky top, translucent black, right-aligned status/actions.
+- Sidebar labels should be operational and short: `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`.
+- Header must follow the Baisync dashboard header pattern: 56px high, sticky top, translucent black, no visible status chips, left mobile menu toggle plus `Painel` gradient label, and only two compact right-side actions: notifications and profile.
+- On mobile, the sidebar must use the Baisync drawer pattern: hamburger button in the header, fixed left drawer, black translucent backdrop, `z-50` sidebar over `z-40` overlay, and close on backdrop/nav click.
 - Content: `max-w-7xl`, `p-5 lg:p-6`, dense grids.
 - Decorative orbs must be subtle and non-interactive.
+
+## Status Presentation Rules
+
+- Do not use visible status pills/chips/badges for dashboard health states.
+- Never render copy such as `Gateway 200`, `OK`, `Atenção`, `Crítico`, or similar status words as pill labels.
+- Use compact card-corner icons plus concrete body text for state.
+- If state needs to be named, place it as normal row text (`running`, `loopback`, `sem falhas`) rather than a colored badge.
+- Keep the most important operational data first: token/cost collection, configured agents, gateway health, errors, then lower-level resource counters.
 
 ## Anti-AI-Slop Copy Standards
 
@@ -76,9 +92,9 @@ Use OpenAI-style instruction discipline for copy and skills: concrete positive i
 
 ### Do
 
-- Use source-backed, operational labels: `Gateway 200`, `Tasks 257 / 1200`, `Journal 24h`.
+- Use source-backed, operational labels: `Tokens`, `Agentes`, `Gateway`, `Erros 24h`, `Tasks 257 / 1200`.
 - Explain missing data plainly: `Tokens not instrumented yet`.
-- Prefer nouns and verbs over hype: `Pipeline de coleta`, `Snapshot`, `Crons ativos`.
+- Prefer nouns and verbs over hype: `Crons ativos`, `Uso ao Longo do Tempo`, `Agentes configurados`.
 - Keep safety and privacy rules in docs/skills, not as virtue-signaling badges in the UI.
 - Make every card answer: what is this, current state, where did it come from?
 
@@ -87,6 +103,7 @@ Use OpenAI-style instruction discipline for copy and skills: concrete positive i
 - Do not use generic SaaS/AI phrases: `Command Center`, `AI-powered`, `seamless`, `unlock insights`, `sem segredos`, `sem PII`, `sem logs brutos`.
 - Do not add fake precision or invented charts.
 - Do not add floating marketing badges to technical dashboards.
+- Do not add status-pill decoration to compensate for weak hierarchy.
 - Do not overuse gradients, sparkles, oversized hero sections, or empty slogans.
 
 ### Acceptable vs. Unacceptable
@@ -96,13 +113,14 @@ Acceptable:
 ```text
 Gateway
 Ativo
-Health 200 em 127.0.0.1:18789
+Endpoint de health respondeu em loopback
 ```
 
 Unacceptable:
 
 ```text
 AI-powered command center with secure insights and no secrets
+Gateway 200   OK   Atenção
 ```
 
 ## Verification Checklist
@@ -110,6 +128,8 @@ AI-powered command center with secure insights and no secrets
 - [ ] Relevant HeroUI docs were checked for changed components.
 - [ ] UI uses HeroUI v3 patterns and compiles with TypeScript.
 - [ ] Sidebar contains the operational navigation items.
+- [ ] Header matches Baisync: `Painel` on the left, notification icon and profile icon on the right, no gateway/IP/logout/status chips.
+- [ ] Cards use small top-right icons for state; no visible `Gateway 200`, `OK`, or `Atenção` chips.
 - [ ] No AI-slop badge/copy was introduced.
 - [ ] `yarn lint`, `yarn typecheck`, `yarn build`, and Playwright pass.
 - [ ] Browser verification confirms login, dashboard rendering, and logout.

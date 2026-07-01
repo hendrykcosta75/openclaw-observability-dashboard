@@ -22,7 +22,8 @@ Phase 1 turns the authenticated layout into a tighter operations dashboard:
 - `/login` accepts `DASHBOARD_AUTH_USER` and `DASHBOARD_AUTH_PASSWORD` from `.env`.
 - Auth creates an HTTP-only signed cookie.
 - Logout clears the cookie.
-- Sidebar contains `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`, `Plano`.
+- Sidebar contains `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`.
+- The evolution plan stays in Markdown docs only; the dashboard UI does not render a `Plano de evolução` section.
 - The UI does not show `sem segredos`, `sem PII`, `sem logs brutos`, `Command Center`, or generic AI marketing phrases.
 - `yarn audit --level moderate`, `yarn lint`, `yarn typecheck`, `yarn test`, and `yarn build` pass.
 - Nginx serves the app at `http://54.175.2.242/` and `/healthz` remains available.

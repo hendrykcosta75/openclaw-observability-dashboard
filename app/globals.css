@@ -208,13 +208,6 @@
   z-index: 0;
 }
 
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  box-shadow: 0 0 16px currentColor;
-}
-
 @keyframes baisync-text-shimmer {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }

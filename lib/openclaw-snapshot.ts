@@ -2,18 +2,12 @@ import {
   Activity,
   AlertTriangle,
   Bot,
-  CalendarClock,
   CircleDollarSign,
   Clock3,
-  Container,
   FileWarning,
-  Gauge,
-  GitBranch,
   HeartPulse,
   ListChecks,
   LucideIcon,
-  RadioTower,
-  Server,
   ShieldCheck,
   TerminalSquare,
   TimerReset,
@@ -48,48 +42,33 @@ export const snapshotMeta = {
 
 export const topMetrics: MetricCard[] = [
   {
-    label: "Gateway",
-    value: "Ativo",
-    detail: "Health 200 em 127.0.0.1:18789",
+    label: "Tokens",
+    value: "128k",
+    detail: "Mock: R$ 184,32 estimados até o coletor real",
     tone: "ok",
-    icon: HeartPulse,
-  },
-  {
-    label: "Tasks",
-    value: "257 / 1200",
-    detail: "TasksCurrent dentro do limite",
-    tone: "ok",
-    icon: Gauge,
-    progress: 21,
-  },
-  {
-    label: "Memória",
-    value: "1.59 GB",
-    detail: "MemoryCurrent; teto 2.73 GB",
-    tone: "warn",
-    icon: Server,
-    progress: 58,
-  },
-  {
-    label: "Journal 24h",
-    value: "0 warnings",
-    detail: "Sem buckets de erro críticos",
-    tone: "ok",
-    icon: ShieldCheck,
+    icon: CircleDollarSign,
+    progress: 42,
   },
   {
     label: "Agentes",
     value: "3",
-    detail: "main, notes e marketing",
+    detail: "main, agendamento-notes e agente-marketing",
     tone: "ok",
     icon: Bot,
   },
   {
-    label: "MCPs",
-    value: "8",
-    detail: "Idle TTL 180s configurado",
+    label: "Gateway",
+    value: "Ativo",
+    detail: "Endpoint de health respondeu em loopback",
     tone: "ok",
-    icon: GitBranch,
+    icon: HeartPulse,
+  },
+  {
+    label: "Erros 24h",
+    value: "0 warnings",
+    detail: "Journal do gateway no recorte recente",
+    tone: "ok",
+    icon: ShieldCheck,
   },
 ];
 
@@ -138,13 +117,13 @@ export const timerRows: MonitorItem[] = [
 ];
 
 export const cronRows = [
-  { name: "notes-scheduler", cadence: "*/2 min", target: "agendamento-notes.mjs scheduler", health: "ok" },
-  { name: "medical-poll", cadence: "*/2 min", target: "agendamento-medico-automation.mjs poll", health: "ok" },
-  { name: "medical-approval-monitor", cadence: "*/2 min", target: "approval-monitor", health: "ok" },
-  { name: "medical-slack-otp", cadence: "*/4 min", target: "slack-otp", health: "ok" },
-  { name: "medical-monitor", cadence: "seg 08:17", target: "monitor pesado", health: "queued" },
-  { name: "medical-exam-monitor", cadence: "seg 08:47", target: "exam-monitor pesado", health: "queued" },
-  { name: "review-stale-reminders", cadence: "09:30 diário", target: "lembretes de revisão", health: "ok" },
+  { name: "notes-scheduler", cadence: "*/2 min", target: "agendamento-notes.mjs scheduler", health: "sem falhas" },
+  { name: "medical-poll", cadence: "*/2 min", target: "agendamento-medico-automation.mjs poll", health: "sem falhas" },
+  { name: "medical-approval-monitor", cadence: "*/2 min", target: "approval-monitor", health: "sem falhas" },
+  { name: "medical-slack-otp", cadence: "*/4 min", target: "slack-otp", health: "sem falhas" },
+  { name: "medical-monitor", cadence: "seg 08:17", target: "monitor pesado", health: "janela pesada" },
+  { name: "medical-exam-monitor", cadence: "seg 08:47", target: "exam-monitor pesado", health: "janela pesada" },
+  { name: "review-stale-reminders", cadence: "09:30 diário", target: "lembretes de revisão", health: "sem falhas" },
 ];
 
 export const stateCards = [
@@ -182,40 +161,6 @@ export const logRows = [
   { file: "agendamento-medico-automation.log", sampled: "3000 linhas", errors: 0, deferred: 0, success: 0, size: "18.4 MB" },
   { file: "agendamento-notes.log", sampled: "3000 linhas", errors: 0, deferred: 0, success: 432, size: "137.5 MB" },
   { file: "journal openclaw-gateway", sampled: "24h", errors: 0, deferred: 0, success: 0, size: "warnings=0" },
-];
-
-export const costPlan = [
-  {
-    name: "Tokens por agente",
-    status: "Instrumentar",
-    detail: "Trajetórias recentes não expuseram campos input/output/total_tokens.",
-    icon: CircleDollarSign,
-  },
-  {
-    name: "Provider/model map",
-    status: "Planejado",
-    detail: "codex/gpt-5.5, claude-sonnet, OpenAI/Google/ZAI/Moonshot por agente.",
-    icon: RadioTower,
-  },
-  {
-    name: "Infra Lightsail",
-    status: "Planejado",
-    detail: "Integrar AWS Cost Explorer ou custo fixo mensal do instance size.",
-    icon: Container,
-  },
-  {
-    name: "Rollup diário",
-    status: "Planejado",
-    detail: "JSON/SQLite local com custo estimado por dia, agente e fluxo.",
-    icon: CalendarClock,
-  },
-];
-
-export const deploymentPlan = [
-  { step: "Layout", status: "feito", detail: "Next.js dashboard com snapshot sanitizado e design Baisync-like." },
-  { step: "Coletor", status: "próximo", detail: "Gerar JSON sanitizado via timer, sem comandos por request." },
-  { step: "Custos", status: "próximo", detail: "Encontrar fonte real de tokens/uso; não inferir valores." },
-  { step: "Alertas", status: "próximo", detail: "Incidentes, drill-down seguro e links para playbooks." },
 ];
 
 export const sidebarStats = [
