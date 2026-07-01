@@ -20,6 +20,15 @@ npm run build
 npm run start -- --hostname 127.0.0.1 --port 3100
 ```
 
+## Deploy atual
+
+- Repo no VPS: `/home/ubuntu/openclaw-observability-dashboard`
+- Serviço systemd user: `openclaw-observability-dashboard.service`
+- Next.js local: `http://127.0.0.1:3100`
+- Nginx público: `http://54.175.2.242/`
+- Healthcheck público: `http://54.175.2.242/healthz`
+- Templates versionados: `deploy/systemd/` e `deploy/nginx/`
+
 ## Harness de agentes
 
 - `AGENTS.md` é o contrato principal para qualquer agente trabalhar neste repo.
