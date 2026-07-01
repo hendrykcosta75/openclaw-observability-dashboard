@@ -44,7 +44,6 @@ export const snapshotMeta = {
   openclawVersion: "OpenClaw 2026.5.22 (a374c3a)",
   nodeVersion: "v22.22.2",
   npmVersion: "10.9.7",
-  safety: "Snapshot sanitizado: sem tokens, payloads, PII ou logs brutos.",
 };
 
 export const topMetrics: MetricCard[] = [
@@ -217,11 +216,6 @@ export const deploymentPlan = [
   { step: "Coletor", status: "próximo", detail: "Gerar JSON sanitizado via timer, sem comandos por request." },
   { step: "Custos", status: "próximo", detail: "Encontrar fonte real de tokens/uso; não inferir valores." },
   { step: "Alertas", status: "próximo", detail: "Incidentes, drill-down seguro e links para playbooks." },
-];
-
-export const navSections = [
-  { label: "Monitoramento", items: ["Overview", "Custos", "Crons", "Agentes", "Gateway", "Logs"] },
-  { label: "Harness", items: ["Plano", "Design system", "Coleta segura"] },
 ];
 
 export const sidebarStats = [
