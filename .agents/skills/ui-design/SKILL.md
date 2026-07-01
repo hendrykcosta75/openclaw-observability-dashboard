@@ -1,92 +1,115 @@
 ---
 name: ui-design
-description: Use when editing the OpenClaw Observability Dashboard UI. Enforces the Baisync-inspired dark dashboard design system, Tailwind v4 tokens, HeroUI v3 usage, typography, cards, buttons, charts, and accessibility rules.
-version: 1.0.0
+description: Use before editing OpenClaw dashboard UI. Enforces HeroUI v3 usage, Baisync-inspired visual language, operational copy, anti-AI-slop standards, and browser validation.
+version: 1.1.0
 author: Hermes Agent
-license: MIT
+license: Proprietary
 metadata:
   hermes:
-    tags: [ui, design-system, baisync, tailwind, heroui, dashboard]
+    tags: [ui, design-system, baisync, tailwind, heroui, dashboard, anti-slop]
     related_skills: [openclaw-observability]
 ---
 
 # UI Design System — OpenClaw Dashboard
 
-## Overview
+## Purpose
 
-This skill preserves the visual language copied from the Baisync dashboard while adapting it to OpenClaw monitoring: dark operational console, orange accent, glass panels, neumorphic controls, dense-but-readable telemetry and mono labels.
+Keep the dashboard looking like a real operations tool: dense, specific, restrained, and verifiable. The visual baseline is the Baisync dashboard: dark surfaces, orange accent, glass/neumorphic cards, mono labels, and a left sidebar.
 
-## When to Use
+## Required Documentation Lookup
 
-Use before any change to:
+Before adding or changing a HeroUI component, open the relevant HeroUI v3 docs:
 
-- `app/**/*.tsx`
-- `components/**/*.tsx`
-- `app/globals.css`
-- `lib/openclaw-snapshot.ts` when labels or display grouping change
+- Components index: https://heroui.com/docs/react/components
+- Direct component docs: `https://heroui.com/docs/react/components/{component-name}.mdx`
+- Common components:
+  - Card: https://heroui.com/docs/react/components/card.mdx
+  - Button: https://heroui.com/docs/react/components/button.mdx
+  - Input: https://heroui.com/docs/react/components/input.mdx
+  - Form: https://heroui.com/docs/react/components/form.mdx
+  - Chip: https://heroui.com/docs/react/components/chip.mdx
+  - Progress: https://heroui.com/docs/react/components/progress.mdx
+
+Use HeroUI v3 patterns only. Do not use HeroUI v2 assumptions.
+
+## Component Rules
+
+- Prefer HeroUI components for interactive UI: `Button`, `Input`, `TextField`, `Form`, `Card`, `Chip`, `Progress`, modal/dialog components.
+- Use compound component anatomy where HeroUI provides it: `Card.Header`, `Card.Content`, `Card.Title`, `Card.Description`.
+- Do not add `HeroUIProvider`; v3 does not require it.
+- Use `onPress` for HeroUI buttons.
+- Icons go inside HeroUI buttons as children, not via unsupported props.
+- Dashboard-specific visual classes (`btn-neu`, `glass-card`, `sidebar-item-active`) may be applied through `className` on HeroUI components.
 
 ## Visual Tokens
 
-Use semantic Tailwind tokens from `app/globals.css` instead of ad-hoc colors:
+Use tokens and classes from `app/globals.css`:
 
-- surfaces: `bg-app`, `bg-surface`, `bg-raised`, `bg-overlay`, `bg-dim`
-- text: `text-heading`, `text-body`, `text-subtle`
-- borders: `border-border-dim`
-- brand: `text-gradient`, `glow-orange`, `glow-orange-strong`
+- Surfaces: `bg-app`, `bg-surface`, `bg-raised`, `bg-overlay`, `bg-dim`
+- Text: `text-heading`, `text-body`, `text-subtle`
+- Borders: `border-border-dim`
+- Accent: `text-gradient`, `glow-orange`, `glow-orange-strong`
 
-Raw hex is allowed only inside CSS token definitions or SVG gradients.
+Raw hex is allowed only for existing accent overrides or token definitions. Do not introduce new palettes.
 
 ## Typography
 
-Operational labels and titles must use:
+Use mono labels for operational UI:
 
 ```tsx
 const mono = { fontFamily: "'JetBrains Mono', 'Fira Code', monospace" } as const;
 ```
 
-Apply it inline to headings, stat labels, sidebar items and table headers. This mirrors the Baisync dashboard.
+Apply it to headings, sidebar items, table headers, metric labels, IDs, timestamps, and operational numbers.
 
 ## Layout
 
-- Fixed full-height app shell: sidebar + content column.
-- Sidebar: translucent black, backdrop blur, active item with `.sidebar-item-active`.
-- Header: 56px, sticky top, translucent black, right-aligned chips/actions.
-- Content: `max-w-7xl`, padding `p-5 lg:p-6`, dense grids.
+- Fixed full-height shell: left sidebar + content column.
+- Sidebar labels should be operational and short: `Dashboard`, `Logs`, `Agentes`, `Gateway`, `Crons`, `Custos`, `Plano`.
+- Header height: 56px, sticky top, translucent black, right-aligned status/actions.
+- Content: `max-w-7xl`, `p-5 lg:p-6`, dense grids.
 - Decorative orbs must be subtle and non-interactive.
 
-## Components
+## Anti-AI-Slop Copy Standards
 
-- Use HeroUI v3 compound components when they help semantics, e.g. `Card`, `Card.Header`, `Card.Content`.
-- No `HeroUIProvider`; HeroUI v3 does not need it.
-- Avoid `framer-motion`; use CSS transitions.
-- Dashboard buttons should be native `<button>`/`<a>` styled with `btn-neu` or `btn-neu-ghost`.
+Use OpenAI-style instruction discipline for copy and skills: concrete positive instructions, explicit structure, examples, and realistic high-value outputs.
 
-## Chart and Metrics Style
+### Do
 
-- Prefer compact cards with a label, large value and small explanation.
-- Use orange for primary active signals; green/yellow/red only for health state.
-- Use sparklines/progress rails with low-opacity grids and no fake precision.
-- If a value is not instrumented yet, say `Instrumentar` or `Planejado`, not a fake number.
+- Use source-backed, operational labels: `Gateway 200`, `Tasks 257 / 1200`, `Journal 24h`.
+- Explain missing data plainly: `Tokens not instrumented yet`.
+- Prefer nouns and verbs over hype: `Pipeline de coleta`, `Snapshot`, `Crons ativos`.
+- Keep safety and privacy rules in docs/skills, not as virtue-signaling badges in the UI.
+- Make every card answer: what is this, current state, where did it come from?
 
-## Accessibility
+### Do Not
 
-- Text contrast must remain readable on dark surfaces.
-- Hit targets: at least 40px for controls, 44px for mobile controls.
-- Use semantic headings and `aria-label` for icon-only controls.
-- Preserve focus rings with orange accent.
+- Do not use generic SaaS/AI phrases: `Command Center`, `AI-powered`, `seamless`, `unlock insights`, `sem segredos`, `sem PII`, `sem logs brutos`.
+- Do not add fake precision or invented charts.
+- Do not add floating marketing badges to technical dashboards.
+- Do not overuse gradients, sparkles, oversized hero sections, or empty slogans.
 
-## Common Pitfalls
+### Acceptable vs. Unacceptable
 
-1. Creating generic SaaS cards with arbitrary fake metrics.
-2. Mixing light Tailwind defaults into the dark console.
-3. Using HeroUI v2 patterns such as `HeroUIProvider` or flat card props.
-4. Printing or rendering raw operational logs or PII.
-5. Replacing Baisync's dense mono dashboard posture with a marketing page.
+Acceptable:
+
+```text
+Gateway
+Ativo
+Health 200 em 127.0.0.1:18789
+```
+
+Unacceptable:
+
+```text
+AI-powered command center with secure insights and no secrets
+```
 
 ## Verification Checklist
 
-- [ ] CSS imports are ordered: Tailwind first, HeroUI styles second.
-- [ ] Page uses the app shell: sidebar, header, content grid.
-- [ ] Cards and buttons use the local design system classes.
-- [ ] No secrets/PII/raw logs rendered.
-- [ ] `npm run build` passes.
+- [ ] Relevant HeroUI docs were checked for changed components.
+- [ ] UI uses HeroUI v3 patterns and compiles with TypeScript.
+- [ ] Sidebar contains the operational navigation items.
+- [ ] No AI-slop badge/copy was introduced.
+- [ ] `yarn lint`, `yarn typecheck`, `yarn build`, and Playwright pass.
+- [ ] Browser verification confirms login, dashboard rendering, and logout.

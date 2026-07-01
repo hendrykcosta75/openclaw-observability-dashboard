@@ -1,42 +1,89 @@
 # OpenClaw Observability Dashboard
 
-Primeiro layout do painel de monitoramento do OpenClaw, baseado no layout do dashboard do Baisync: sidebar escura, header translúcido, cartões glass/neumorphic, acento laranja e tipografia mono.
+Private operations dashboard for OpenClaw on the Lightsail VPS.
+
+## What it shows
+
+- gateway status and resource limits;
+- agents and recent activity buckets;
+- crons and systemd timers;
+- log counters and state counts;
+- cost instrumentation plan;
+- deploy and collection roadmap.
+
+The dashboard uses an aggregated snapshot in `lib/openclaw-snapshot.ts`. Raw logs, OpenClaw configs, credentials, payloads and private message content are not rendered.
 
 ## Stack
 
 - Next.js 16 App Router
 - React 19
 - Tailwind CSS v4
-- HeroUI v3 (`@heroui/react` + `@heroui/styles`)
-- Lucide icons
-- Recharts preparado para a próxima fase de métricas reais
+- HeroUI v3
+- Playwright
+- Yarn Classic
 
-## Comandos
+## Local setup
 
 ```bash
-npm install
-npm run dev -- --hostname 127.0.0.1 --port 3100
-npm run build
-npm run start -- --hostname 127.0.0.1 --port 3100
+yarn install
+cp .env.example .env
+# edit .env and replace every placeholder
+yarn dev --hostname 127.0.0.1 --port 3100
 ```
 
-## Deploy atual
+Open `http://127.0.0.1:3100/login` and sign in with the `.env` credentials.
 
-- Repo no VPS: `/home/ubuntu/openclaw-observability-dashboard`
-- Serviço systemd user: `openclaw-observability-dashboard.service`
-- Next.js local: `http://127.0.0.1:3100`
-- Nginx público: `http://54.175.2.242/`
-- Healthcheck público: `http://54.175.2.242/healthz`
-- Templates versionados: `deploy/systemd/` e `deploy/nginx/`
+## Required environment variables
 
-## Harness de agentes
+```dotenv
+DASHBOARD_AUTH_USER=admin
+DASHBOARD_AUTH_PASSWORD=change-this-password
+AUTH_SECRET=replace-with-a-random-32-byte-or-longer-secret
+AUTH_COOKIE_SECURE=false
+```
 
-- `AGENTS.md` é o contrato principal para qualquer agente trabalhar neste repo.
-- `.agents/skills/ui-design/SKILL.md` mantém o design system Baisync-like.
-- `.agents/skills/openclaw-observability/SKILL.md` mantém regras de coleta segura de dados do OpenClaw.
-- `docs/openclaw-inventory.md` registra o inventário sanitizado coletado no VPS.
-- `docs/dashboard-plan.md` detalha o plano em fases do dashboard.
+Set `AUTH_COOKIE_SECURE=true` only after HTTPS is configured.
 
-## Segurança
+## Verification
 
-Este layout usa um snapshot sanitizado em `lib/openclaw-snapshot.ts`. Ele não inclui tokens, chaves, payloads Slack/WhatsApp, URLs privadas, nomes de pacientes/clínicas, OTPs ou conteúdo bruto de logs.
+Run before deploy:
+
+```bash
+yarn audit --level moderate
+yarn lint
+yarn typecheck
+yarn test
+yarn build
+```
+
+Expected public checks after deploy:
+
+```bash
+curl -I http://54.175.2.242/
+curl http://54.175.2.242/healthz
+```
+
+## Deploy layout
+
+- VPS repo: `/home/ubuntu/openclaw-observability-dashboard`
+- systemd user service: `openclaw-observability-dashboard.service`
+- Next.js bind: `127.0.0.1:3100`
+- Nginx entrypoint: `http://54.175.2.242/`
+- healthcheck: `/healthz`
+
+Templates:
+
+- `deploy/systemd/openclaw-observability-dashboard.service`
+- `deploy/nginx/openclaw-observability-dashboard.conf`
+
+## Agent harness
+
+- `AGENTS.md` is the source of truth for agents.
+- `CLAUDE.md` forwards to `AGENTS.md`.
+- `.agents/skills/ui-design/SKILL.md` defines UI/HeroUI/anti-slop rules.
+- `.agents/skills/openclaw-observability/SKILL.md` defines safe collection and deploy rules.
+- `docs/project-plan.md` tracks roadmap and acceptance criteria.
+
+## License
+
+Proprietary. See `LICENSE`.

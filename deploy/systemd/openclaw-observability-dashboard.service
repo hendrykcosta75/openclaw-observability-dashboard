@@ -8,7 +8,8 @@ WorkingDirectory=/home/ubuntu/openclaw-observability-dashboard
 Environment=NODE_ENV=production
 Environment=NEXT_TELEMETRY_DISABLED=1
 Environment=PORT=3100
-ExecStart=/usr/bin/npm run start -- --hostname 127.0.0.1 --port 3100
+EnvironmentFile=/home/ubuntu/openclaw-observability-dashboard/.env
+ExecStart=/usr/bin/yarn start --hostname 127.0.0.1 --port 3100
 Restart=always
 RestartSec=5
 KillMode=control-group
