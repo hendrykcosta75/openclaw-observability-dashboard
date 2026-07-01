@@ -441,7 +441,7 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <a href="/docs/dashboard-plan.md" className="btn-neu inline-flex items-center gap-2 self-start md:self-auto">
+                  <a href="#plano" className="btn-neu inline-flex items-center gap-2 self-start md:self-auto">
                     Plano técnico <ArrowUpRight size={14} />
                   </a>
                 </Card.Content>
