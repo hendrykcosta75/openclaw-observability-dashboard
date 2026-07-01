@@ -1,99 +1,22 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { Button, Card, Dropdown } from "@heroui/react";
-import {
-  AlertTriangle,
-  Bell,
-  Bot,
-  CheckCircle2,
-  CircleDollarSign,
-  Clock3,
-  CircleDot,
-  HeartPulse,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  ScrollText,
-  Server,
-} from "lucide-react";
+import { Card } from "@heroui/react";
+import { Bot, Clock3, HeartPulse, ScrollText, Server } from "lucide-react";
 import {
   agentRows,
   cronRows,
   logRows,
   serviceRows,
-  sidebarStats,
   timerRows,
   topMetrics,
-  type HealthTone,
 } from "@/lib/openclaw-snapshot";
-
-const mono = { fontFamily: "'JetBrains Mono', 'Fira Code', monospace" } as const;
-
-const usageData = [
-  { date: "2026-06-18", cost: 12.4 },
-  { date: "2026-06-19", cost: 18.7 },
-  { date: "2026-06-20", cost: 16.2 },
-  { date: "2026-06-21", cost: 24.9 },
-  { date: "2026-06-22", cost: 28.5 },
-  { date: "2026-06-23", cost: 22.8 },
-  { date: "2026-06-24", cost: 33.1 },
-  { date: "2026-06-25", cost: 37.6 },
-  { date: "2026-06-26", cost: 31.4 },
-  { date: "2026-06-27", cost: 42.9 },
-  { date: "2026-06-28", cost: 36.2 },
-  { date: "2026-06-29", cost: 47.8 },
-  { date: "2026-06-30", cost: 44.3 },
-  { date: "2026-07-01", cost: 52.6 },
-];
-
-function fmtChartDate(iso: string) {
-  const parts = iso.split("-");
-  if (parts.length === 3) return `${parts[2]}/${parts[1]}`;
-  return iso;
-}
-
-const sidebarNav = [
-  { label: "Dashboard", href: "#dashboard", icon: LayoutDashboard },
-  { label: "Logs", href: "#logs", icon: ScrollText },
-  { label: "Agentes", href: "#agentes", icon: Bot },
-  { label: "Gateway", href: "#gateway", icon: HeartPulse },
-  { label: "Crons", href: "#crons", icon: Clock3 },
-  { label: "Custos", href: "#custos", icon: CircleDollarSign },
-];
-
-const toneIconStyles: Record<HealthTone, { text: string; label: string; icon: React.ElementType }> = {
-  ok: { text: "text-emerald-400", label: "operational", icon: CheckCircle2 },
-  warn: { text: "text-[#D4835A]", label: "watch", icon: AlertTriangle },
-  danger: { text: "text-red-400", label: "incident", icon: AlertTriangle },
-  planned: { text: "text-[#D4835A]", label: "planned", icon: CircleDot },
-};
-
-function HealthMark({ tone, label }: { tone: HealthTone; label?: string }) {
-  const s = toneIconStyles[tone];
-  const Icon = s.icon;
-  return (
-    <span aria-label={label ?? s.label} title={label ?? s.label} className={`inline-flex h-7 w-7 items-center justify-center ${s.text}`}>
-      <Icon size={16} strokeWidth={1.9} />
-    </span>
-  );
-}
-
-function SectionTitle({ eyebrow, title, description, icon: Icon }: { eyebrow: string; title: string; description: string; icon: React.ElementType }) {
-  return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-subtle" style={mono}>
-          <Icon size={13} className="text-[#D4835A]" />
-          {eyebrow}
-        </div>
-        <h2 className="text-xl font-semibold text-heading" style={mono}>{title}</h2>
-        <p className="mt-1 max-w-2xl text-sm text-subtle">{description}</p>
-      </div>
-    </div>
-  );
-}
+import { Header } from "./dashboard/header";
+import { Sidebar } from "./dashboard/sidebar";
+import { HealthMark } from "./dashboard/shared/health-mark";
+import { mono } from "./dashboard/shared/mono";
+import { SectionTitle } from "./dashboard/shared/section-title";
+import { UsageChart } from "./dashboard/shared/usage-chart";
 
 function MetricTile({ metric, index }: { metric: (typeof topMetrics)[number]; index: number }) {
   const Icon = metric.icon;
@@ -115,124 +38,6 @@ function MetricTile({ metric, index }: { metric: (typeof topMetrics)[number]; in
         )}
       </Card.Content>
     </Card>
-  );
-}
-
-function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  return (
-    <>
-      {isOpen && (
-        <button
-          type="button"
-          aria-label="Fechar navegação"
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-          onClick={onClose}
-        />
-      )}
-
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[248px] shrink-0 flex-col border-r border-border-dim transition-transform duration-200 lg:static lg:h-screen lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
-        style={{
-          background: "rgba(14, 14, 14, 0.85)",
-          backdropFilter: "blur(40px)",
-          WebkitBackdropFilter: "blur(40px)",
-          boxShadow: "4px 0 24px rgba(0,0,0,0.4), 1px 0 0 rgba(255,255,255,0.02)",
-        }}
-      >
-      <div className="border-b border-border-dim p-5">
-        <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 overflow-hidden rounded-[14px] border border-[rgba(255,107,44,0.16)] bg-[rgba(255,107,44,0.08)] glow-orange-strong">
-            <Image src="/assets/openclaw-profile.jpg" alt="OpenClaw" fill sizes="40px" className="object-cover" priority />
-          </div>
-          <div>
-            <p className="text-gradient text-[13px] font-bold uppercase tracking-[0.18em]" style={mono}>OpenClaw</p>
-            <p className="text-[11px] text-subtle" style={mono}>Operations</p>
-          </div>
-        </div>
-      </div>
-
-      <nav className="flex-1 overflow-y-auto px-3 py-4" aria-label="Dashboard navigation">
-        <p className="mb-2 px-3 text-[10px] uppercase tracking-[0.18em] text-subtle" style={mono}>Monitoramento</p>
-        <ul className="space-y-1">
-          {sidebarNav.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <li key={item.label}>
-                <a href={item.href} onClick={onClose} className={`flex items-center gap-2.5 px-3 py-2 text-[12px] transition-all ${index === 0 ? "sidebar-item-active" : "rounded-[10px] text-[rgba(255,255,255,0.45)] hover:bg-[rgba(255,255,255,0.03)] hover:text-[rgba(255,255,255,0.88)]"}`} style={mono}>
-                  <Icon size={14} className="opacity-70" />
-                  {item.label}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      <div className="border-t border-border-dim p-3">
-        <div className="grid grid-cols-3 gap-2">
-          {sidebarStats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div key={stat.label} className="rounded-[12px] bg-dim p-2 text-center">
-                <Icon size={14} className="mx-auto mb-1 text-[#D4835A]" />
-                <div className="text-[13px] font-semibold text-heading" style={mono}>{stat.value}</div>
-                <div className="text-[9px] text-subtle" style={mono}>{stat.label}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      </aside>
-    </>
-  );
-}
-
-function Header({ onMenuClick }: { onMenuClick: () => void }) {
-  async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.href = "/login";
-  }
-
-  return (
-    <header
-      className="sticky top-0 z-30 flex h-14 items-center justify-between px-4 lg:px-6"
-      style={{ background: "rgba(10, 10, 10, 0.8)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-    >
-      <div className="flex items-center gap-3">
-        <Button isIconOnly size="sm" variant="ghost" aria-label="Abrir navegação" className="h-10 w-10 min-w-10 rounded-full border-none text-subtle transition-colors hover:bg-[rgba(255,107,44,0.06)] hover:text-heading lg:hidden" onPress={onMenuClick}>
-          <Menu size={19} />
-        </Button>
-        <span className="text-gradient text-[13px] font-bold uppercase tracking-[2px]" style={mono}>Painel</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <Button isIconOnly size="sm" variant="ghost" aria-label="Notificações" className="h-9 w-9 min-w-9 rounded-full border-none text-subtle transition-colors hover:bg-[rgba(255,107,44,0.06)] hover:text-heading">
-          <Bell size={17} />
-        </Button>
-        <Dropdown>
-          <Button isIconOnly size="sm" variant="ghost" aria-label="Perfil" className="h-9 w-9 min-w-9 rounded-full border-none text-subtle transition-colors hover:bg-[rgba(255,107,44,0.06)] hover:text-heading">
-            <span className="relative h-7 w-7 overflow-hidden rounded-full border border-[rgba(255,107,44,0.16)]">
-              <Image src="/assets/openclaw-profile.jpg" alt="Perfil OpenClaw" fill sizes="28px" className="object-cover" />
-            </span>
-          </Button>
-          <Dropdown.Popover>
-            <Dropdown.Menu aria-label="Profile actions" onAction={(key) => {
-              if (key === "logout") void handleLogout();
-            }}>
-              <Dropdown.Item id="profile" textValue="OpenClaw dashboard profile" className="h-14 gap-2">
-                <p className="font-semibold">OpenClaw</p>
-                <p className="font-semibold text-subtle">Dashboard</p>
-              </Dropdown.Item>
-              <Dropdown.Item id="logout" textValue="Sair" variant="danger">
-                <div className="flex items-center gap-2">
-                  <LogOut size={14} />
-                  Sair
-                </div>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown.Popover>
-        </Dropdown>
-      </div>
-    </header>
   );
 }
 
@@ -259,126 +64,6 @@ function ServicesPanel() {
             </div>
           </div>
         ))}
-      </Card.Content>
-    </Card>
-  );
-}
-
-function UsagePanel() {
-  const [hoverIdx, setHoverIdx] = React.useState<number | null>(null);
-  const values = usageData.map((d) => d.cost);
-  const max = Math.max(...values, 1);
-  const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  const w = 510;
-  const h = 170;
-  const padX = 5;
-  const padY = 10;
-  const chartW = w - padX * 2;
-  const chartH = h - padY * 2;
-  const points = values.map((v, i) => ({
-    x: padX + (i / Math.max(values.length - 1, 1)) * chartW,
-    y: padY + chartH - (v / max) * chartH,
-  }));
-  const linePath = points.length > 1
-    ? points.slice(1).reduce((path, point, i) => {
-        const prev = points[i];
-        const cpx = (prev.x + point.x) / 2;
-        return `${path} C${cpx},${prev.y} ${cpx},${point.y} ${point.x},${point.y}`;
-      }, `M${points[0].x},${points[0].y}`)
-    : "";
-  const areaPath = linePath ? `${linePath} L${points[points.length - 1].x},${padY + chartH} L${points[0].x},${padY + chartH} Z` : "";
-  const labelIndices = [0, 4, 9, usageData.length - 1];
-
-  return (
-    <Card id="custos" className="p-6">
-      <Card.Header className="mb-4 p-0">
-        <div>
-          <Card.Title className="text-base font-semibold text-heading">Custo ao Longo do Tempo</Card.Title>
-          <Card.Description className="text-sm text-subtle" style={mono}>Valores mockados em reais — últimos 14 dias</Card.Description>
-        </div>
-      </Card.Header>
-      <Card.Content className="p-0">
-        <div className="relative" style={{ height: 180 }}>
-          <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ height: "100%", display: "block" }} preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="openclawUsageAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#E8712A" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#E8712A" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <line x1="0" y1={h * 0.25} x2={w} y2={h * 0.25} stroke="rgba(255,255,255,0.03)" />
-            <line x1="0" y1={h * 0.5} x2={w} y2={h * 0.5} stroke="rgba(255,255,255,0.03)" />
-            <line x1="0" y1={h * 0.75} x2={w} y2={h * 0.75} stroke="rgba(255,255,255,0.03)" />
-            {areaPath && <path d={areaPath} fill="url(#openclawUsageAreaGrad)" />}
-            {linePath && <path d={linePath} fill="none" stroke="#D4835A" strokeWidth="2" />}
-            {points.map((p, i) => (
-              <rect
-                key={usageData[i].date}
-                x={p.x - w / values.length / 2}
-                y={0}
-                width={w / values.length}
-                height={h}
-                fill="transparent"
-                onMouseEnter={() => setHoverIdx(i)}
-                onMouseLeave={() => setHoverIdx(null)}
-              />
-            ))}
-          </svg>
-
-          {labelIndices.map((idx) => {
-            const p = points[idx];
-            const isLast = idx === usageData.length - 1;
-            return (
-              <div
-                key={usageData[idx].date}
-                className="absolute pointer-events-none"
-                style={{
-                  left: `${(p.x / w) * 100}%`,
-                  top: `${(p.y / h) * 100}%`,
-                  transform: "translate(-50%, -50%)",
-                  width: 7,
-                  height: 7,
-                  borderRadius: "50%",
-                  background: isLast ? "#D4835A" : "#1E1E1E",
-                  border: isLast ? "none" : "1.5px solid #D4835A",
-                }}
-              />
-            );
-          })}
-
-          {hoverIdx !== null && points[hoverIdx] && (
-            <div
-              className="absolute pointer-events-none z-10 rounded-lg px-2.5 py-1.5 text-[11px] whitespace-nowrap"
-              style={{
-                left: `${(points[hoverIdx].x / w) * 100}%`,
-                top: `${(points[hoverIdx].y / h) * 100}%`,
-                transform: "translate(-50%, -130%)",
-                background: "#1a1a1a",
-                border: "1px solid #2a2a2a",
-                color: "#f0f0f0",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              }}
-            >
-              <span style={{ color: "#D4835A", fontWeight: 600 }}>{fmt(values[hoverIdx])}</span>
-              <span style={{ color: "rgba(255,255,255,0.3)", marginLeft: 6 }}>{fmtChartDate(usageData[hoverIdx].date)}</span>
-            </div>
-          )}
-
-          <div className="mt-1 flex justify-between px-0">
-            {labelIndices.map((idx) => (
-              <span key={usageData[idx].date} className="text-[9px]" style={{ color: "rgba(255,255,255,0.15)", fontFamily: "'JetBrains Mono', monospace" }}>
-                {idx === usageData.length - 1 ? "Hoje" : fmtChartDate(usageData[idx].date)}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-3 flex justify-end">
-          <div className="rounded-lg px-3 py-1.5 text-xs font-medium text-white" style={{ ...mono, border: "1px solid #1e1e1e", background: "linear-gradient(135deg, #ff6b2c, #ff8533)" }}>
-            R$
-          </div>
-        </div>
       </Card.Content>
     </Card>
   );
@@ -509,7 +194,7 @@ export default function DashboardShell() {
             </section>
 
             <section className="space-y-5">
-              <UsagePanel />
+              <UsageChart id="custos" />
             </section>
 
             <section id="gateway" className="space-y-5">
@@ -520,7 +205,6 @@ export default function DashboardShell() {
             <CronsAndTimers />
             <AgentsPanel />
             <LogsPanel />
-
           </div>
         </main>
       </div>

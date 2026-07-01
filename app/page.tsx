@@ -1,15 +1,7 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import DashboardShell from "@/components/dashboard-shell";
-import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
+import { requireAuth } from "@/lib/require-auth";
 
 export default async function Home() {
-  const cookieStore = await cookies();
-  const session = verifySessionToken(cookieStore.get(AUTH_COOKIE_NAME)?.value);
-
-  if (!session) {
-    redirect("/login");
-  }
-
+  await requireAuth();
   return <DashboardShell />;
 }

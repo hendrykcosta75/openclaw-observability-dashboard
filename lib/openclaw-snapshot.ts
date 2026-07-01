@@ -168,3 +168,20 @@ export const sidebarStats = [
   { label: "Crons", value: "7", icon: Clock3 },
   { label: "Serviços", value: "5", icon: TerminalSquare },
 ];
+
+export const usageChartData = [
+  { date: "2026-06-18", cost: 12.4 },
+  { date: "2026-06-19", cost: 18.7 },
+  { date: "2026-06-20", cost: 16.2 },
+  { date: "2026-06-21", cost: 24.9 },
+  { date: "2026-06-22", cost: 28.5 },
+  { date: "2026-06-23", cost: 22.8 },
+  { date: "2026-06-24", cost: 33.1 },
+  { date: "2026-06-25", cost: 37.6 },
+  { date: "2026-06-26", cost: 31.4 },
+  { date: "2026-06-27", cost: 42.9 },
+  { date: "2026-06-28", cost: 36.2 },
+  { date: "2026-06-29", cost: 47.8 },
+  { date: "2026-06-30", cost: 44.3 },
+  { date: "2026-07-01", cost: 52.6 },
+];
