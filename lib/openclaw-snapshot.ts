@@ -173,7 +173,6 @@ export interface CostInstrumentation {
   tokenCollection: string;
   traceSource: string;
   priceMapStatus: string;
-  backlog: string[];
   providers: { id: string; models: string[] }[];
 }
 
@@ -181,12 +180,6 @@ export const costDetails: CostInstrumentation = {
   tokenCollection: "Tokens not instrumented yet",
   traceSource: "OpenClaw/Codex traces — usage field pending validation",
   priceMapStatus: "Provider price map not checked in",
-  backlog: [
-    "Wire collector timer on VPS",
-    "Extract per-run token counts from sanitized traces",
-    "Add daily JSON rollups",
-    "Optional Lightsail fixed cost line item",
-  ],
   providers: [
     { id: "openai", models: ["gpt-5.4", "gpt-5-mini"] },
     { id: "anthropic", models: ["claude-sonnet-4"] },

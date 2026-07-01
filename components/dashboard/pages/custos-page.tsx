@@ -12,7 +12,7 @@ export function CustosPage() {
         <h1 className="text-3xl font-light tracking-tight text-heading" style={{ fontFamily: "'Fira Code', 'JetBrains Mono', monospace" }}>
           Custos
         </h1>
-        <p className="text-subtle">Instrumentação de tokens, inventário de providers e backlog de coleta.</p>
+        <p className="text-subtle">Instrumentação de tokens e inventário de providers.</p>
         <p className="text-xs text-subtle" style={mono}>Coletado em {snapshotMeta.collectedAt}</p>
       </div>
 
@@ -55,20 +55,6 @@ export function CustosPage() {
             </Card>
           ))}
         </div>
-      </section>
-
-      <section className="space-y-5">
-        <SectionTitle eyebrow="Backlog" title="Próximos passos" description="Itens da fase 2/3 do plano de custos — sem estimativas inventadas." icon={CircleDollarSign} />
-        <Card className="p-4">
-          <Card.Content className="space-y-3 p-0">
-            {costDetails.backlog.map((item, index) => (
-              <div key={item} className={`flex gap-3 text-sm ${index > 0 ? "border-t border-border-dim pt-3" : ""}`}>
-                <span className="text-[#D4835A]" style={mono}>{String(index + 1).padStart(2, "0")}</span>
-                <p className="text-body">{item}</p>
-              </div>
-            ))}
-          </Card.Content>
-        </Card>
       </section>
     </div>
   );
