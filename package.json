@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "audit": "yarn audit --level moderate"
   },
   "dependencies": {
     "@heroui/react": "3.0.1",
@@ -29,11 +33,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "postcss": "^8.5.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@playwright/test": "^1.57.0"
   },
-  "overrides": {
-    "next": {
-      "postcss": "8.5.10"
-    }
+  "packageManager": "yarn@1.22.22",
+  "resolutions": {
+    "next/postcss": "8.5.10",
+    "postcss": "^8.5.10"
   }
 }
