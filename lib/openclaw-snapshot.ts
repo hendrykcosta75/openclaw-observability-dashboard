@@ -169,6 +169,18 @@ export const sidebarStats = [
   { label: "Serviços", value: "5", icon: TerminalSquare },
 ];
 
+export interface LogWindowBucket {
+  window: string;
+  errors: number;
+  warnings: number;
+  deferred: number;
+}
+
+export const logWindowBuckets: LogWindowBucket[] = [
+  { window: "24h", errors: 0, warnings: 0, deferred: 8 },
+  { window: "7d", errors: 0, warnings: 2, deferred: 41 },
+];
+
 export const usageChartData = [
   { date: "2026-06-18", cost: 12.4 },
   { date: "2026-06-19", cost: 18.7 },
