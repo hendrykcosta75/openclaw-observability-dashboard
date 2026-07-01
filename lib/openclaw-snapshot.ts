@@ -169,6 +169,34 @@ export const sidebarStats = [
   { label: "Serviços", value: "5", icon: TerminalSquare },
 ];
 
+export interface CronCategoryGroup {
+  category: string;
+  description: string;
+  jobs: string[];
+  timers: string[];
+}
+
+export const cronCategoryGroups: CronCategoryGroup[] = [
+  {
+    category: "Notes",
+    description: "Scheduler e propostas de reunião",
+    jobs: ["notes-scheduler", "review-stale-reminders"],
+    timers: ["health-watchdog"],
+  },
+  {
+    category: "Medical",
+    description: "Poll, aprovações, OTP e monitores pesados",
+    jobs: ["medical-poll", "medical-approval-monitor", "medical-slack-otp", "medical-monitor", "medical-exam-monitor"],
+    timers: ["slack-no-silence-watchdog", "browser-ensure"],
+  },
+  {
+    category: "Platform",
+    description: "Gateway, MCPs e sessões Codex",
+    jobs: [],
+    timers: ["mcp-dedup-reaper", "codex-session-reaper", "gateway-refresh"],
+  },
+];
+
 export interface GatewayResourceMetrics {
   pid: string;
   memoryCurrent: string;
