@@ -42,7 +42,9 @@ AUTH_SECRET=replace-with-a-random-32-byte-or-longer-secret
 AUTH_COOKIE_SECURE=false
 ```
 
-Set `AUTH_COOKIE_SECURE=true` only after HTTPS is configured.
+Set `AUTH_COOKIE_SECURE=true` only after HTTPS is configured. The current IP deployment is HTTP-only; use it on trusted networks only until TLS is added.
+
+The login route has app-side attempt limiting and Nginx `limit_req` protection, but TLS is still required before treating the password and cookie as protected on untrusted networks.
 
 ## Verification
 

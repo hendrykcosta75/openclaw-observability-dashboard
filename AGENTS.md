@@ -63,6 +63,7 @@ A change is not complete until these checks pass:
    - `curl -I http://54.175.2.242/` returns a redirect to `/login` when unauthenticated;
    - `curl http://54.175.2.242/healthz` returns `openclaw-observability-dashboard ok`.
 8. Browser/Playwright or browser tool confirmation captures the actual public UI, not only curl output.
+9. Public deployment currently uses plain HTTP on the instance IP. Treat HTTPS + `AUTH_COOKIE_SECURE=true` as required before using the dashboard on an untrusted network.
 
 ## Design Baseline
 

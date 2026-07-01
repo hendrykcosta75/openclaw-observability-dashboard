@@ -11,10 +11,22 @@ type SessionPayload = {
 
 type RequiredAuthEnv = "DASHBOARD_AUTH_USER" | "DASHBOARD_AUTH_PASSWORD" | "AUTH_SECRET";
 
+type LoginAttemptBucket = {
+  count: number;
+  resetAt: number;
+};
+
+const LOGIN_WINDOW_MS = 5 * 60 * 1000;
+const LOGIN_MAX_FAILURES = 5;
+const loginAttempts = new Map<string, LoginAttemptBucket>();
+
 function requireEnv(name: RequiredAuthEnv) {
   const value = process.env[name];
   if (!value || value.trim().length === 0) {
     throw new Error(`${name} is required`);
+  }
+  if (name === "AUTH_SECRET" && value.length < 32) {
+    throw new Error("AUTH_SECRET must be at least 32 characters");
   }
   return value;
 }
@@ -43,6 +55,43 @@ function safeEqual(a: string, b: string) {
 
 export function shouldUseSecureCookie() {
   return process.env.AUTH_COOKIE_SECURE === "true";
+}
+
+export function getLoginRateLimitKey(request: Request, username: string) {
+  const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const ip = forwardedFor || request.headers.get("x-real-ip") || "local";
+  const normalizedUser = username.trim().toLowerCase() || "empty";
+  return `${ip}:${normalizedUser}`;
+}
+
+export function checkLoginRateLimit(key: string, nowMs = Date.now()) {
+  const bucket = loginAttempts.get(key);
+  if (!bucket || bucket.resetAt <= nowMs) {
+    loginAttempts.delete(key);
+    return { allowed: true, retryAfterSeconds: 0 };
+  }
+
+  if (bucket.count >= LOGIN_MAX_FAILURES) {
+    return {
+      allowed: false,
+      retryAfterSeconds: Math.max(1, Math.ceil((bucket.resetAt - nowMs) / 1000)),
+    };
+  }
+
+  return { allowed: true, retryAfterSeconds: 0 };
+}
+
+export function recordFailedLogin(key: string, nowMs = Date.now()) {
+  const bucket = loginAttempts.get(key);
+  if (!bucket || bucket.resetAt <= nowMs) {
+    loginAttempts.set(key, { count: 1, resetAt: nowMs + LOGIN_WINDOW_MS });
+    return;
+  }
+  bucket.count += 1;
+}
+
+export function clearLoginRateLimit(key: string) {
+  loginAttempts.delete(key);
 }
 
 export function isValidCredentials(username: string, password: string) {

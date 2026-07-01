@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Criar um painel web público, com layout inicialmente estático, para acompanhar saúde operacional do OpenClaw: custos, crons, agentes, gateway, erros e logs.
+Criar um painel web autenticado para acompanhar saúde operacional do OpenClaw: custos, crons, agentes, gateway, erros e logs.
 
 ## Fase 1 — Layout e harness (feito nesta primeira entrega)
 
@@ -35,6 +35,6 @@ Criar um painel web público, com layout inicialmente estático, para acompanhar
 
 ## Critérios de segurança
 
-- O dashboard público nunca mostra payloads, nomes, telefones, tokens ou URLs privadas.
+- O dashboard autenticado nunca mostra payloads, nomes, telefones, tokens ou URLs privadas.
 - OpenClaw gateway continua apenas em loopback.
 - Nginx publica somente o dashboard.

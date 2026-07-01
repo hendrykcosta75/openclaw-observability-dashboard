@@ -6,7 +6,7 @@ Build a private, authenticated dashboard for OpenClaw operations on the Lightsai
 
 ## Current Phase
 
-Phase 1 turns the public static layout into a protected operations dashboard:
+Phase 1 turns the authenticated layout into a tighter operations dashboard:
 
 - cookie-based login from server `.env`;
 - Baisync-like sidebar and card layout;

@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import {
   AUTH_COOKIE_NAME,
   SESSION_TTL_SECONDS,
+  checkLoginRateLimit,
+  clearLoginRateLimit,
   createSessionToken,
+  getLoginRateLimitKey,
   isValidCredentials,
+  recordFailedLogin,
   shouldUseSecureCookie,
 } from "@/lib/auth";
 
@@ -25,10 +29,25 @@ export async function POST(request: Request) {
 
   const username = typeof body.username === "string" ? body.username.trim() : "";
   const password = typeof body.password === "string" ? body.password : "";
+  const rateLimitKey = getLoginRateLimitKey(request, username);
+  const rateLimit = checkLoginRateLimit(rateLimitKey);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many login attempts" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(rateLimit.retryAfterSeconds) },
+      },
+    );
+  }
 
   if (!isValidCredentials(username, password)) {
+    recordFailedLogin(rateLimitKey);
     return NextResponse.json({ error: "Invalid user or password" }, { status: 401 });
   }
+
+  clearLoginRateLimit(rateLimitKey);
 
   const response = NextResponse.json({ ok: true });
   response.cookies.set(AUTH_COOKIE_NAME, createSessionToken(username), {

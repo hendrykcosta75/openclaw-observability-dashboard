@@ -72,13 +72,13 @@ Phase 2 should add:
 
 - Keep credentials in server `.env`: `DASHBOARD_AUTH_USER`, `DASHBOARD_AUTH_PASSWORD`, `AUTH_SECRET`.
 - `.env` must remain ignored; only `.env.example` is committed.
-- Use HTTP-only cookie authentication for this single-user dashboard stage.
+- HTTP-only cookie authentication with app-side and Nginx login rate limiting for this single-user dashboard stage.
 - Set `AUTH_COOKIE_SECURE=true` only when the dashboard is served over HTTPS.
 
 ## Deployment Rules
 
 - Next.js binds to `127.0.0.1:3100` behind Nginx.
-- Nginx is the public entry point with `server_name 54.175.2.242 _;`.
+- Nginx is the public entry point with `server_name 54.175.2.242 _;` and `limit_req` on `/api/auth/login`.
 - Do not expose the OpenClaw gateway (`127.0.0.1:18789`).
 - Public port 80 is for the dashboard only.
 - User systemd service must load `.env` and run Yarn.

@@ -21,6 +21,23 @@ test("rejects invalid credentials", async ({ page }) => {
   await expect(page).toHaveURL(/\/login$/);
 });
 
+test("rate limits repeated invalid credentials", async ({ request }) => {
+  const user = `ratelimit-${Date.now()}`;
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const response = await request.post("/api/auth/login", {
+      data: { username: user, password: "wrong-password" },
+    });
+    expect(response.status()).toBe(401);
+  }
+
+  const response = await request.post("/api/auth/login", {
+    data: { username: user, password: "wrong-password" },
+  });
+  expect(response.status()).toBe(429);
+  expect(response.headers()["retry-after"]).toBeTruthy();
+});
+
 test("authenticates valid credentials and logs out", async ({ page }) => {
   await page.goto("/login");
 

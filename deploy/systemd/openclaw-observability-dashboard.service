@@ -12,6 +12,8 @@ EnvironmentFile=/home/ubuntu/openclaw-observability-dashboard/.env
 ExecStart=/usr/bin/yarn start --hostname 127.0.0.1 --port 3100
 Restart=always
 RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
 KillMode=control-group
 TimeoutStopSec=20
 
