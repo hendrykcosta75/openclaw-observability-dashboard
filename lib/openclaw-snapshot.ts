@@ -169,6 +169,42 @@ export const sidebarStats = [
   { label: "Serviços", value: "5", icon: TerminalSquare },
 ];
 
+export interface AgentDetail {
+  name: string;
+  modelId: string;
+  plugins: string[];
+  mcps: string[];
+  recentEvents: string;
+  tone: HealthTone;
+}
+
+export const agentDetails: AgentDetail[] = [
+  {
+    name: "main",
+    modelId: "gpt-5.4",
+    plugins: ["slack", "medical-automation", "clickup"],
+    mcps: ["filesystem", "postgres-readonly"],
+    recentEvents: "12 runs / 24h",
+    tone: "ok",
+  },
+  {
+    name: "agendamento-notes",
+    modelId: "gpt-5.4",
+    plugins: ["gmail", "drive", "clickup", "notes-scheduler"],
+    mcps: ["google-workspace", "sqlite-state"],
+    recentEvents: "28 runs / 24h",
+    tone: "warn",
+  },
+  {
+    name: "agente-marketing",
+    modelId: "gpt-5-mini",
+    plugins: ["slack-marketing", "cron-publisher"],
+    mcps: ["web-search"],
+    recentEvents: "3 runs / 24h",
+    tone: "ok",
+  },
+];
+
 export interface LogWindowBucket {
   window: string;
   errors: number;
