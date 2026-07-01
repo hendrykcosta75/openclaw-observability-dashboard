@@ -112,5 +112,6 @@ test("mobile navbar opens Baisync-style navigation drawer", async ({ page }) => 
   await expect(page.getByRole("link", { name: /Plano/ })).toHaveCount(0);
 
   await page.getByRole("link", { name: /Logs/ }).click();
-  await expect(page.getByRole("button", { name: "Fechar navegação" })).toHaveCount(0);
+  await expect(page).toHaveURL(/\/logs$/);
+  await expect(page.getByRole("heading", { name: "Logs e estados" })).toBeVisible();
 });
