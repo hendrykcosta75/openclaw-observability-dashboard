@@ -301,6 +301,36 @@ export const logWindowBuckets: LogWindowBucket[] = [
   { window: "7d", errors: 0, warnings: 2, deferred: 41 },
 ];
 
+export interface DashboardNotification {
+  id: string;
+  title: string;
+  summary: string;
+  tone: HealthTone;
+  detectedAt: string;
+  source: string;
+  details: { label: string; value: string }[];
+  suggestedAction: string;
+}
+
+export const dashboardNotifications: DashboardNotification[] = [
+  {
+    id: "evolution-whatsapp-disconnected",
+    title: "WhatsApp desconectado no Evolution",
+    summary: "Instância medico perdeu sessão com o gateway WhatsApp.",
+    tone: "danger",
+    detectedAt: "2026-07-01 09:38",
+    source: "health-watchdog · Evolution API",
+    details: [
+      { label: "Instância", value: "medico" },
+      { label: "Container", value: "evolution-api" },
+      { label: "Último QR", value: "2026-06-28 14:12" },
+      { label: "Health check", value: "connectionState=close" },
+      { label: "Impacto", value: "Fluxo médico sem ingestão WhatsApp" },
+    ],
+    suggestedAction: "Reconectar via Evolution manager ou reiniciar a instância medico.",
+  },
+];
+
 export const usageChartData = [
   { date: "2026-06-18", cost: 12.4 },
   { date: "2026-06-19", cost: 18.7 },

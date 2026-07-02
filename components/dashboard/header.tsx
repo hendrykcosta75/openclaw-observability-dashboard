@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { Button, Dropdown } from "@heroui/react";
-import { Bell, LogOut, Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
+import { NotificationsMenu } from "./notifications/notifications-menu";
 import { mono } from "./shared/mono";
 
 export function Header({ onMenuClick }: { onMenuClick: () => void }) {
@@ -23,9 +24,7 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
         <span className="text-gradient text-[13px] font-bold uppercase tracking-[2px]" style={mono}>Painel</span>
       </div>
       <div className="flex items-center gap-2">
-        <Button isIconOnly size="sm" variant="ghost" aria-label="Notificações" className="h-9 w-9 min-w-9 rounded-full border-none text-subtle transition-colors hover:bg-[rgba(255,107,44,0.06)] hover:text-heading">
-          <Bell size={17} />
-        </Button>
+        <NotificationsMenu />
         <Dropdown>
           <Button isIconOnly size="sm" variant="ghost" aria-label="Perfil" className="h-9 w-9 min-w-9 rounded-full border-none text-subtle transition-colors hover:bg-[rgba(255,107,44,0.06)] hover:text-heading">
             <span className="relative h-7 w-7 overflow-hidden rounded-full border border-[rgba(255,107,44,0.16)]">

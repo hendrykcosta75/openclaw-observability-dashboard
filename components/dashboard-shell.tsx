@@ -17,6 +17,7 @@ import { HealthMark } from "./dashboard/shared/health-mark";
 import { mono } from "./dashboard/shared/mono";
 import { SectionTitle } from "./dashboard/shared/section-title";
 import { UsageChart } from "./dashboard/shared/usage-chart";
+import { NotificationBanner } from "./dashboard/notifications/notification-banner";
 
 function MetricTile({ metric, index }: { metric: (typeof topMetrics)[number]; index: number }) {
   const Icon = metric.icon;
@@ -187,6 +188,8 @@ export default function DashboardShell() {
                 </h2>
                 <p className="text-subtle">Veja o que está acontecendo com o OpenClaw hoje.</p>
               </div>
+
+              <NotificationBanner />
 
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {topMetrics.map((metric, index) => <MetricTile key={metric.label} metric={metric} index={index} />)}
