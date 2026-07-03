@@ -78,7 +78,8 @@ test("authenticates valid credentials and logs out", async ({ page }) => {
   await expect(page.getByText("agendamento-notes")).toBeVisible();
   await expect(page.getByText("0 erros · 432 eventos ok nas últimas 24h")).toBeVisible();
   await expect(page.getByText("Ver logs completos")).toBeVisible();
-  await expect(page.getByTestId("detail-links-row")).toBeVisible();
+  await expect(page.getByTestId("intent-links-row")).toBeVisible();
+  await expect(page.getByTestId("day-status-banner")).toBeVisible();
   await expect(page.getByRole("button", { name: "Notificações" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Perfil" })).toBeVisible();
   await expect(page.locator("section#dashboard").getByText("Snapshot", { exact: true })).toHaveCount(0);

@@ -11,6 +11,13 @@ import { AgentCostBarChart } from "./dashboard/costs/agent-cost-bar-chart";
 import { CostKpiCards } from "./dashboard/costs/cost-kpi-cards";
 import { MonthlyCostChart } from "./dashboard/costs/monthly-cost-chart";
 import { NotificationBanner } from "./dashboard/notifications/notification-banner";
+import { ActivityTimeline } from "./dashboard/home/activity-timeline";
+import { AttentionPanel } from "./dashboard/home/attention-panel";
+import { CostContextLine } from "./dashboard/home/cost-context-line";
+import { DayStatusBanner } from "./dashboard/home/day-status-banner";
+import { FlowSummaryCards } from "./dashboard/home/flow-summary-cards";
+import { IntentLinksRow } from "./dashboard/home/intent-links-row";
+import { WhatsAppStatusCard } from "./dashboard/home/whatsapp-status-card";
 import { HealthMark } from "./dashboard/shared/health-mark";
 import { mono } from "./dashboard/shared/mono";
 import { SectionTitle } from "./dashboard/shared/section-title";
@@ -68,31 +75,6 @@ function ErrorsSummaryPanel() {
   );
 }
 
-const detailLinks = [
-  { href: "/agentes", label: "Agentes" },
-  { href: "/crons", label: "Crons" },
-  { href: "/logs", label: "Logs" },
-  { href: "/gateway", label: "Gateway" },
-  { href: "/custos", label: "Custos" },
-];
-
-function DetailLinksRow() {
-  return (
-    <div className="flex flex-wrap gap-x-4 gap-y-2" data-testid="detail-links-row">
-      {detailLinks.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          className="text-xs text-subtle transition-colors hover:text-heading"
-          style={mono}
-        >
-          {link.label} →
-        </Link>
-      ))}
-    </div>
-  );
-}
-
 export default function DashboardShell() {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
@@ -114,7 +96,11 @@ export default function DashboardShell() {
                 <p className="text-subtle">Resumo do que precisa de atenção hoje.</p>
               </div>
 
+              <DayStatusBanner />
               <NotificationBanner />
+              <AttentionPanel />
+              <FlowSummaryCards />
+              <CostContextLine />
               <CostKpiCards />
             </section>
 
@@ -124,13 +110,15 @@ export default function DashboardShell() {
                 <MonthlyCostChart />
               </div>
               <section id="gateway" className="space-y-5">
+                <WhatsAppStatusCard />
                 <SectionTitle eyebrow="Gateway" title="Saúde dos serviços" description="Estado resumido dos componentes principais." icon={HeartPulse} />
                 <ServicesHealthPanel />
               </section>
             </section>
 
+            <ActivityTimeline />
             <ErrorsSummaryPanel />
-            <DetailLinksRow />
+            <IntentLinksRow />
           </div>
         </main>
       </div>

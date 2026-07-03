@@ -16,9 +16,10 @@ test("cost kpi card opens detail modal", async ({ page }) => {
 
   await page.getByTestId("cost-kpi-cost-today").click();
 
-  await expect(page.getByRole("dialog", { name: "Custo de hoje" })).toBeVisible();
-  await expect(page.getByText("Marketing · R$ 30,50")).toBeVisible();
-  await expect(page.getByText("Acima da média")).toBeVisible();
+  const modal = page.getByRole("dialog", { name: "Custo de hoje" });
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText("Marketing · R$ 30,50")).toBeVisible();
+  await expect(modal.getByText("Acima da média", { exact: true })).toBeVisible();
   await expect(page.getByTestId("cost-calculation-panel")).toBeVisible();
   await expect(page.getByText("Tokens input")).toBeVisible();
   await expect(page.getByText("Tokens output")).toBeVisible();
@@ -32,6 +33,7 @@ test("agent cost bar chart opens agent detail modal", async ({ page }) => {
   await login(page);
 
   await expect(page.getByTestId("agent-cost-bar-chart")).toBeVisible();
+  await page.getByTestId("agent-cost-bar-chart").scrollIntoViewIfNeeded();
   await page.getByTestId("agent-cost-bar-agente-marketing").click({ force: true });
 
   const modal = page.getByRole("dialog", { name: "Custo · Marketing" });

@@ -32,13 +32,183 @@ export interface MonitorItem {
 }
 
 export const snapshotMeta = {
-  collectedAt: "2026-07-01T09:40:11-03:00",
+  collectedAt: "2026-07-03T13:40:11-03:00",
+  collectedAtLabel: "03/07 às 13:40",
   serverIp: "54.175.2.242",
   host: "ip-172-26-11-186",
   openclawVersion: "OpenClaw 2026.5.22 (a374c3a)",
   nodeVersion: "v22.22.2",
   npmVersion: "10.9.7",
 };
+
+export interface DayStatus {
+  headline: string;
+  summary: string;
+  tone: HealthTone;
+}
+
+export const dayStatus: DayStatus = {
+  headline: "1 problema ativo",
+  summary: "WhatsApp médico desconectado — agendamentos podem ficar sem resposta automática.",
+  tone: "warn",
+};
+
+export interface AttentionItem {
+  id: string;
+  label: string;
+  count: number;
+  description: string;
+  tone: HealthTone;
+  href?: string;
+  notificationId?: string;
+}
+
+export const attentionItems: AttentionItem[] = [
+  {
+    id: "whatsapp-offline",
+    label: "WhatsApp médico offline",
+    count: 1,
+    description: "Reconectar para retomar contatos e respostas automáticas.",
+    tone: "danger",
+    notificationId: "evolution-whatsapp-disconnected",
+  },
+  {
+    id: "contact-approvals",
+    label: "Aprovações de contato pendentes",
+    count: 2,
+    description: "Aguardando APROVAR CONTATO no Slack antes do primeiro WhatsApp.",
+    tone: "warn",
+    href: "/agentes",
+  },
+  {
+    id: "notes-review",
+    label: "Propostas de notas para revisar",
+    count: 4,
+    description: "Cards no ClickUp aguardando APROVAR, AJUSTAR ou REPROVAR.",
+    tone: "warn",
+    href: "/logs",
+  },
+];
+
+export interface FlowSummaryCard {
+  id: string;
+  label: string;
+  headline: string;
+  detail: string;
+  tone: HealthTone;
+  href: string;
+}
+
+export const flowSummaryCards: FlowSummaryCard[] = [
+  {
+    id: "medico",
+    label: "Agendamento médico",
+    headline: "2 agendamentos em andamento",
+    detail: "0 erros hoje · WhatsApp sem novos eventos",
+    tone: "warn",
+    href: "/agentes",
+  },
+  {
+    id: "notes",
+    label: "Notas de reunião",
+    headline: "4 propostas aguardando revisão",
+    detail: "432 eventos ok nas últimas 24h",
+    tone: "ok",
+    href: "/logs",
+  },
+  {
+    id: "marketing",
+    label: "Marketing",
+    headline: "Cron executando normalmente",
+    detail: "Última execução há 5 min · sem pendências",
+    tone: "ok",
+    href: "/agentes",
+  },
+  {
+    id: "main",
+    label: "Cleo principal",
+    headline: "Slack respondendo",
+    detail: "Rotas gerais e DMs operacionais",
+    tone: "ok",
+    href: "/gateway",
+  },
+];
+
+export interface ActivityTimelineItem {
+  id: string;
+  time: string;
+  flow: string;
+  summary: string;
+  tone: HealthTone;
+}
+
+export const activityTimeline: ActivityTimelineItem[] = [
+  {
+    id: "tl-1",
+    time: "13:28",
+    flow: "Médico",
+    summary: "Agente dedicado registrado e respondendo no canal #agendamento-medico",
+    tone: "ok",
+  },
+  {
+    id: "tl-2",
+    time: "12:04",
+    flow: "Notas",
+    summary: "12 propostas processadas · 4 aguardando revisão humana",
+    tone: "ok",
+  },
+  {
+    id: "tl-3",
+    time: "11:50",
+    flow: "Médico",
+    summary: "1 contato aprovado no Slack · execução adiada por WhatsApp offline",
+    tone: "warn",
+  },
+  {
+    id: "tl-4",
+    time: "09:46",
+    flow: "Marketing",
+    summary: "Cron executou sem novas tarefas · resposta SEM_ACAO",
+    tone: "ok",
+  },
+  {
+    id: "tl-5",
+    time: "09:30",
+    flow: "Notas",
+    summary: "Lembretes de revisão enviados para cards pendentes há mais de 48h",
+    tone: "ok",
+  },
+];
+
+export interface WhatsAppChannelStatus {
+  connected: boolean;
+  instanceLabel: string;
+  headline: string;
+  impact: string;
+  lastActiveLabel: string;
+  tone: HealthTone;
+}
+
+export const whatsAppChannelStatus: WhatsAppChannelStatus = {
+  connected: false,
+  instanceLabel: "medico",
+  headline: "Desconectado",
+  impact: "Agendamentos médicos pausados até reconectar o WhatsApp.",
+  lastActiveLabel: "Última atividade: 28/06 às 14:12",
+  tone: "danger",
+};
+
+export const costContextInsight = {
+  line: "Hoje: R$ 52,60 — acima da média diária (+26%). Marketing responde por 58% do gasto.",
+  weeklyLine: "Esta semana: +87% vs semana anterior.",
+};
+
+export const intentLinks = [
+  { href: "/agentes", label: "Ver aprovações pendentes" },
+  { href: "/custos", label: "Ver custos do mês" },
+  { href: "/gateway", label: "Ver status do WhatsApp" },
+  { href: "/logs", label: "Ver atividade recente" },
+];
 
 export const topMetrics: MetricCard[] = [
   {
