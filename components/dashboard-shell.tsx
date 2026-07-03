@@ -9,6 +9,7 @@ import { Header } from "./dashboard/header";
 import { Sidebar } from "./dashboard/sidebar";
 import { AgentCostBarChart } from "./dashboard/costs/agent-cost-bar-chart";
 import { CostKpiCards } from "./dashboard/costs/cost-kpi-cards";
+import { MonthlyCostChart } from "./dashboard/costs/monthly-cost-chart";
 import { NotificationBanner } from "./dashboard/notifications/notification-banner";
 import { HealthMark } from "./dashboard/shared/health-mark";
 import { mono } from "./dashboard/shared/mono";
@@ -118,7 +119,10 @@ export default function DashboardShell() {
             </section>
 
             <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">
-              <AgentCostBarChart />
+              <div className="space-y-4">
+                <AgentCostBarChart />
+                <MonthlyCostChart />
+              </div>
               <section id="gateway" className="space-y-5">
                 <SectionTitle eyebrow="Gateway" title="Saúde dos serviços" description="Estado resumido dos componentes principais." icon={HeartPulse} />
                 <ServicesHealthPanel />

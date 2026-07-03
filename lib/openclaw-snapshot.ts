@@ -355,6 +355,21 @@ export interface AgentCostRow {
   costToday: number;
   sharePercent: number;
   dailyCosts: { date: string; cost: number }[];
+  tokens7d: TokenSpend;
+  tokensToday: TokenSpend;
+  calculationBases: CostCalculationBasis[];
+}
+
+export interface TokenSpend {
+  input: number;
+  output: number;
+}
+
+export interface CostCalculationBasis {
+  provider: string;
+  modelId: string;
+  inputRatePer1M: string;
+  outputRatePer1M: string;
 }
 
 export interface CostKpiCard {
@@ -365,6 +380,8 @@ export interface CostKpiCard {
   trend: "up" | "down" | "flat";
   modalTitle: string;
   modalDetails: { label: string; value: string }[];
+  tokens: TokenSpend;
+  calculationBases: CostCalculationBasis[];
 }
 
 export interface ErrorHighlight {
@@ -373,6 +390,23 @@ export interface ErrorHighlight {
   tone: HealthTone;
 }
 
+export const openAiRates = {
+  gpt54: {
+    provider: "openai",
+    modelId: "gpt-5.4",
+    inputRatePer1M: "R$ 12,50 / 1M tokens",
+    outputRatePer1M: "R$ 37,50 / 1M tokens",
+  },
+  gpt5Mini: {
+    provider: "openai",
+    modelId: "gpt-5-mini",
+    inputRatePer1M: "R$ 0,75 / 1M tokens",
+    outputRatePer1M: "R$ 3,00 / 1M tokens",
+  },
+} as const satisfies Record<string, CostCalculationBasis>;
+
+export const blendedCostBases: CostCalculationBasis[] = [openAiRates.gpt54, openAiRates.gpt5Mini];
+
 export const agentCostRows: AgentCostRow[] = [
   {
     agentId: "agente-marketing",
@@ -380,6 +414,9 @@ export const agentCostRows: AgentCostRow[] = [
     cost7d: 169.8,
     costToday: 30.5,
     sharePercent: 58,
+    tokens7d: { input: 118_400_000, output: 27_800_000 },
+    tokensToday: { input: 18_400_000, output: 4_200_000 },
+    calculationBases: [openAiRates.gpt5Mini],
     dailyCosts: [
       { date: "2026-06-25", cost: 21.8 },
       { date: "2026-06-26", cost: 18.2 },
@@ -396,6 +433,9 @@ export const agentCostRows: AgentCostRow[] = [
     cost7d: 79.1,
     costToday: 14.2,
     sharePercent: 27,
+    tokens7d: { input: 42_600_000, output: 9_800_000 },
+    tokensToday: { input: 8_200_000, output: 1_800_000 },
+    calculationBases: [openAiRates.gpt54],
     dailyCosts: [
       { date: "2026-06-25", cost: 10.2 },
       { date: "2026-06-26", cost: 8.5 },
@@ -412,6 +452,9 @@ export const agentCostRows: AgentCostRow[] = [
     cost7d: 43.9,
     costToday: 7.9,
     sharePercent: 15,
+    tokens7d: { input: 21_300_000, output: 5_400_000 },
+    tokensToday: { input: 3_100_000, output: 900_000 },
+    calculationBases: [openAiRates.gpt54],
     dailyCosts: [
       { date: "2026-06-25", cost: 5.6 },
       { date: "2026-06-26", cost: 4.7 },
@@ -440,6 +483,8 @@ export const costKpiCards: CostKpiCard[] = [
       { label: "Média dos últimos 7 dias", value: "R$ 41,83" },
       { label: "Acima da média", value: "+R$ 10,77 (+26%)" },
     ],
+    tokens: { input: 29_700_000, output: 6_900_000 },
+    calculationBases: blendedCostBases,
   },
   {
     id: "cost-7d",
@@ -456,22 +501,26 @@ export const costKpiCards: CostKpiCard[] = [
       { label: "Menor contribuidor", value: "Notas · 15%" },
       { label: "Período", value: "25/06 – 01/07" },
     ],
+    tokens: { input: 182_300_000, output: 43_000_000 },
+    calculationBases: blendedCostBases,
   },
   {
-    id: "cost-avg",
-    label: "Média diária",
-    value: "R$ 41,83",
-    comparison: "últimos 7 dias",
+    id: "cost-month",
+    label: "Custo do mês",
+    value: "R$ 52,60",
+    comparison: "jul/2026 · parcial",
     trend: "flat",
-    modalTitle: "Média diária de custo",
+    modalTitle: "Custo do mês atual",
     modalDetails: [
-      { label: "Média 7 dias", value: "R$ 41,83" },
-      { label: "Mediana", value: "R$ 37,60" },
-      { label: "Menor dia", value: "26/06 · R$ 31,40" },
-      { label: "Maior dia", value: "01/07 · R$ 52,60" },
-      { label: "Desvio vs hoje", value: "+R$ 10,77 acima da média" },
-      { label: "Agente na média", value: "Principal · R$ 11,30/dia" },
+      { label: "Mês", value: "Julho/2026" },
+      { label: "Acumulado", value: "R$ 52,60" },
+      { label: "Dias registrados", value: "1 de 31" },
+      { label: "Mês anterior", value: "Junho · R$ 892,40" },
+      { label: "Variação vs junho", value: "parcial — junho fechou em R$ 892,40" },
+      { label: "Agente mais caro", value: "Marketing · R$ 30,50" },
     ],
+    tokens: { input: 29_700_000, output: 6_900_000 },
+    calculationBases: blendedCostBases,
   },
   {
     id: "cost-peak",
@@ -488,6 +537,8 @@ export const costKpiCards: CostKpiCard[] = [
       { label: "vs dia anterior", value: "+R$ 8,30 (+19%)" },
       { label: "2º lugar", value: "29/06 · R$ 47,80" },
     ],
+    tokens: { input: 29_700_000, output: 6_900_000 },
+    calculationBases: blendedCostBases,
   },
 ];
 
@@ -501,4 +552,23 @@ export const errorHighlights: ErrorHighlight[] = [
   { source: "agendamento-notes", summary: "0 erros · 432 eventos ok nas últimas 24h", tone: "ok" },
   { source: "agendamento-medico", summary: "0 erros · fluxo médico sem novos eventos WhatsApp", tone: "warn" },
   { source: "openclaw-gateway", summary: "0 erros · 0 warnings no journal de 24h", tone: "ok" },
+];
+
+export interface MonthlyCostRow {
+  month: string;
+  label: string;
+  cost: number;
+  partial?: boolean;
+  tokens: TokenSpend;
+  calculationBases: CostCalculationBasis[];
+}
+
+export const monthlyCostYearData: MonthlyCostRow[] = [
+  { month: "2026-01", label: "Jan", cost: 842.5, tokens: { input: 512_000_000, output: 118_000_000 }, calculationBases: blendedCostBases },
+  { month: "2026-02", label: "Fev", cost: 921.3, tokens: { input: 548_000_000, output: 126_000_000 }, calculationBases: blendedCostBases },
+  { month: "2026-03", label: "Mar", cost: 1054.2, tokens: { input: 601_000_000, output: 141_000_000 }, calculationBases: blendedCostBases },
+  { month: "2026-04", label: "Abr", cost: 1187.6, tokens: { input: 672_000_000, output: 158_000_000 }, calculationBases: blendedCostBases },
+  { month: "2026-05", label: "Mai", cost: 1324.8, tokens: { input: 728_000_000, output: 171_000_000 }, calculationBases: blendedCostBases },
+  { month: "2026-06", label: "Jun", cost: 892.4, tokens: { input: 498_000_000, output: 116_000_000 }, calculationBases: blendedCostBases },
+  { month: "2026-07", label: "Jul", cost: 52.6, partial: true, tokens: { input: 29_700_000, output: 6_900_000 }, calculationBases: blendedCostBases },
 ];

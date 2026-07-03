@@ -4,6 +4,7 @@ import { Button, Modal } from "@heroui/react";
 import { CircleDollarSign } from "lucide-react";
 import type { CostKpiCard } from "@/lib/openclaw-snapshot";
 import { mono } from "../shared/mono";
+import { CostCalculationPanel } from "./cost-calculation-panel";
 
 export function CostKpiDetailModal({
   kpi,
@@ -38,6 +39,7 @@ export function CostKpiDetailModal({
                 </div>
               ))}
             </div>
+            <CostCalculationPanel tokens={kpi.tokens} calculationBases={kpi.calculationBases} />
             <p className="text-xs text-subtle" style={mono}>Valores estimados · mock até coletor real</p>
           </Modal.Body>
           <Modal.Footer>

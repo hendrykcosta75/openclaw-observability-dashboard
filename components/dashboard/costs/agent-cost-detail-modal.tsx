@@ -4,6 +4,7 @@ import { Button, Modal } from "@heroui/react";
 import { Bot } from "lucide-react";
 import type { AgentCostRow } from "@/lib/openclaw-snapshot";
 import { mono } from "../shared/mono";
+import { CostCalculationPanel } from "./cost-calculation-panel";
 
 function fmtBrl(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -58,6 +59,7 @@ export function AgentCostDetailModal({
                 </div>
               ))}
             </div>
+            <CostCalculationPanel tokens={agent.tokens7d} calculationBases={agent.calculationBases} />
             <p className="text-xs text-subtle" style={mono}>Valores estimados · mock até coletor real</p>
           </Modal.Body>
           <Modal.Footer>

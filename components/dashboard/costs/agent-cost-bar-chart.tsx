@@ -6,6 +6,7 @@ import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis
 import { agentCostRows } from "@/lib/openclaw-snapshot";
 import { mono } from "../shared/mono";
 import { AgentCostDetailModal } from "./agent-cost-detail-modal";
+import { fmtTokens } from "./cost-calculation-panel";
 
 function fmtBrl(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -21,6 +22,8 @@ export function AgentCostBarChart() {
     agentId: row.agentId,
     label: row.label,
     cost: row.cost7d,
+    tokens: row.tokens7d,
+    rateLabel: row.calculationBases[0]?.inputRatePer1M ?? "",
   }));
 
   return (
@@ -57,8 +60,13 @@ export function AgentCostBarChart() {
                     const row = payload[0].payload as (typeof chartData)[number];
                     return (
                       <div className="rounded-lg border border-border-dim bg-[#1a1a1a] px-2.5 py-1.5 text-[11px] shadow-lg" style={mono}>
-                        <span className="text-[#D4835A] font-semibold">{fmtBrl(row.cost)}</span>
-                        <span className="ml-2 text-subtle">{row.label}</span>
+                        <div>
+                          <span className="text-[#D4835A] font-semibold">{fmtBrl(row.cost)}</span>
+                          <span className="ml-2 text-subtle">{row.label}</span>
+                        </div>
+                        <div className="mt-1 text-subtle">
+                          in {fmtTokens(row.tokens.input)} · out {fmtTokens(row.tokens.output)}
+                        </div>
                       </div>
                     );
                   }}
