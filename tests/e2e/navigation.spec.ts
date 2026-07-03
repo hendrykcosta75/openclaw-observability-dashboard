@@ -23,8 +23,10 @@ test("sidebar navigates to detail routes", async ({ page }) => {
     { link: /Dashboard/, url: /\/$/, heading: "Visão Geral" },
   ] as const;
 
+  const sidebar = page.locator("aside");
+
   for (const route of routes) {
-    await page.getByRole("link", { name: route.link }).click();
+    await sidebar.getByRole("link", { name: route.link }).click();
     await expect(page).toHaveURL(route.url);
     await expect(page.getByRole("heading", { name: route.heading, exact: true })).toBeVisible();
   }

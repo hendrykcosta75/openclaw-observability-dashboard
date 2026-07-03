@@ -347,3 +347,158 @@ export const usageChartData = [
   { date: "2026-06-30", cost: 44.3 },
   { date: "2026-07-01", cost: 52.6 },
 ];
+
+export interface AgentCostRow {
+  agentId: string;
+  label: string;
+  cost7d: number;
+  costToday: number;
+  sharePercent: number;
+  dailyCosts: { date: string; cost: number }[];
+}
+
+export interface CostKpiCard {
+  id: string;
+  label: string;
+  value: string;
+  comparison: string;
+  trend: "up" | "down" | "flat";
+  modalTitle: string;
+  modalDetails: { label: string; value: string }[];
+}
+
+export interface ErrorHighlight {
+  source: string;
+  summary: string;
+  tone: HealthTone;
+}
+
+export const agentCostRows: AgentCostRow[] = [
+  {
+    agentId: "agente-marketing",
+    label: "Marketing",
+    cost7d: 169.8,
+    costToday: 30.5,
+    sharePercent: 58,
+    dailyCosts: [
+      { date: "2026-06-25", cost: 21.8 },
+      { date: "2026-06-26", cost: 18.2 },
+      { date: "2026-06-27", cost: 24.9 },
+      { date: "2026-06-28", cost: 21.0 },
+      { date: "2026-06-29", cost: 27.7 },
+      { date: "2026-06-30", cost: 25.7 },
+      { date: "2026-07-01", cost: 30.5 },
+    ],
+  },
+  {
+    agentId: "main",
+    label: "Principal",
+    cost7d: 79.1,
+    costToday: 14.2,
+    sharePercent: 27,
+    dailyCosts: [
+      { date: "2026-06-25", cost: 10.2 },
+      { date: "2026-06-26", cost: 8.5 },
+      { date: "2026-06-27", cost: 11.6 },
+      { date: "2026-06-28", cost: 9.8 },
+      { date: "2026-06-29", cost: 12.9 },
+      { date: "2026-06-30", cost: 12.0 },
+      { date: "2026-07-01", cost: 14.2 },
+    ],
+  },
+  {
+    agentId: "agendamento-notes",
+    label: "Notas",
+    cost7d: 43.9,
+    costToday: 7.9,
+    sharePercent: 15,
+    dailyCosts: [
+      { date: "2026-06-25", cost: 5.6 },
+      { date: "2026-06-26", cost: 4.7 },
+      { date: "2026-06-27", cost: 6.4 },
+      { date: "2026-06-28", cost: 5.4 },
+      { date: "2026-06-29", cost: 7.2 },
+      { date: "2026-06-30", cost: 6.6 },
+      { date: "2026-07-01", cost: 7.9 },
+    ],
+  },
+];
+
+export const costKpiCards: CostKpiCard[] = [
+  {
+    id: "cost-today",
+    label: "Custo hoje",
+    value: "R$ 52,60",
+    comparison: "+19% vs ontem",
+    trend: "up",
+    modalTitle: "Custo de hoje",
+    modalDetails: [
+      { label: "Total", value: "R$ 52,60" },
+      { label: "Ontem", value: "R$ 44,30" },
+      { label: "Variação", value: "+R$ 8,30 (+19%)" },
+      { label: "Agente mais caro", value: "Marketing · R$ 30,50" },
+      { label: "Média dos últimos 7 dias", value: "R$ 41,83" },
+      { label: "Acima da média", value: "+R$ 10,77 (+26%)" },
+    ],
+  },
+  {
+    id: "cost-7d",
+    label: "Custo 7 dias",
+    value: "R$ 292,80",
+    comparison: "+87% vs semana anterior",
+    trend: "up",
+    modalTitle: "Custo dos últimos 7 dias",
+    modalDetails: [
+      { label: "Total 7 dias", value: "R$ 292,80" },
+      { label: "Semana anterior", value: "R$ 156,60" },
+      { label: "Variação", value: "+R$ 136,20 (+87%)" },
+      { label: "Maior contribuidor", value: "Marketing · 58%" },
+      { label: "Menor contribuidor", value: "Notas · 15%" },
+      { label: "Período", value: "25/06 – 01/07" },
+    ],
+  },
+  {
+    id: "cost-avg",
+    label: "Média diária",
+    value: "R$ 41,83",
+    comparison: "últimos 7 dias",
+    trend: "flat",
+    modalTitle: "Média diária de custo",
+    modalDetails: [
+      { label: "Média 7 dias", value: "R$ 41,83" },
+      { label: "Mediana", value: "R$ 37,60" },
+      { label: "Menor dia", value: "26/06 · R$ 31,40" },
+      { label: "Maior dia", value: "01/07 · R$ 52,60" },
+      { label: "Desvio vs hoje", value: "+R$ 10,77 acima da média" },
+      { label: "Agente na média", value: "Principal · R$ 11,30/dia" },
+    ],
+  },
+  {
+    id: "cost-peak",
+    label: "Dia mais caro",
+    value: "01/07",
+    comparison: "R$ 52,60",
+    trend: "up",
+    modalTitle: "Dia de pico de custo",
+    modalDetails: [
+      { label: "Data", value: "01/07/2026" },
+      { label: "Custo total", value: "R$ 52,60" },
+      { label: "Agente responsável", value: "Marketing · R$ 30,50 (58%)" },
+      { label: "vs média diária", value: "+R$ 10,77 (+26%)" },
+      { label: "vs dia anterior", value: "+R$ 8,30 (+19%)" },
+      { label: "2º lugar", value: "29/06 · R$ 47,80" },
+    ],
+  },
+];
+
+export const serviceHealthSummary: MonitorItem[] = [
+  { name: "Gateway OpenClaw", status: "Rodando", detail: "Respondeu ao health check", tone: "ok" },
+  { name: "Evolution API", status: "Desconectado", detail: "WhatsApp da instância medico offline", tone: "danger" },
+  { name: "Dashboard", status: "Online", detail: "Painel acessível via Nginx", tone: "ok" },
+];
+
+export const errorHighlights: ErrorHighlight[] = [
+  { source: "agendamento-notes", summary: "0 erros · 432 eventos ok nas últimas 24h", tone: "ok" },
+  { source: "agendamento-medico", summary: "0 erros · fluxo médico sem novos eventos WhatsApp", tone: "warn" },
+  { source: "openclaw-gateway", summary: "0 erros · 0 warnings no journal de 24h", tone: "ok" },
+];

@@ -57,7 +57,7 @@ A change is not complete until these checks pass:
    - unauthenticated `GET /` redirects to `/login`;
    - `/login` renders the login form;
    - valid credentials reach `/`;
-   - dashboard shows `Visão Geral`, `Gateway`, `Logs`, and `Agentes` on `/`;
+   - dashboard shows `Visão Geral`, cost KPI cards, agent cost bar chart, service health summary, and error highlights on `/`;
    - detail routes `/logs`, `/agentes`, `/gateway`, `/crons`, `/custos` render when authenticated and redirect to `/login` when not;
    - sidebar navigation reaches each route;
    - logout returns to `/login`.
