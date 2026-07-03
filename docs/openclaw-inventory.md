@@ -50,7 +50,7 @@ Coletado em `2026-07-01T09:40:11-03:00` no host `ip-172-26-11-186` (`54.175.2.24
 | --- | --- |
 | Plugins | `anthropic`, `browser`, `codex`, `deepseek`, `google`, `lossless-claw`, `moonshot`, `openai`, `slack`, `telegram`, `zai` |
 | MCP servers | `autentique`, `evolution-whatsapp`, `gamma`, `gmail`, `google-drive`, `notes-gmail`, `notes-google-drive`, `pipefy` |
-| Agentes | `main`, `agendamento-notes`, `agente-marketing` |
+| Agentes | `main`, `agendamento-medico`, `agendamento-notes`, `agente-marketing` |
 | MCP idle TTL | `180000 ms` |
 
 ## Timers systemd de usuário
