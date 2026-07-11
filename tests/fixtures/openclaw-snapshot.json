@@ -1,0 +1,236 @@
+{
+  "schema": "openclaw-observability-snapshot/v1",
+  "collected_at": "2026-07-10T18:23:00.000Z",
+  "availability": {
+    "collector": "available",
+    "monetary_cost": "unavailable"
+  },
+  "gateway": {
+    "service": {
+      "state": "running",
+      "substate": "active",
+      "pid": 1842,
+      "memory_current_bytes": 67108864,
+      "memory_max_bytes": 268435456,
+      "tasks_current": 4,
+      "tasks_max": 16,
+      "restarts": 0,
+      "started_at": "2026-07-10T08:15:30.000Z"
+    },
+    "health": {
+      "status": "offline",
+      "latency_ms": 0
+    }
+  },
+  "whatsapp": {
+    "instance_name": "Cleo",
+    "status": "close",
+    "updated_at": "2026-07-10T18:22:30.000Z"
+  },
+  "services": [
+    {
+      "name": "openclaw-gateway",
+      "image": "openclaw/gateway:0.9.3",
+      "state": "running"
+    },
+    {
+      "name": "evolution-api",
+      "image": "evolution/api:latest",
+      "state": "running"
+    },
+    {
+      "name": "evolution-postgres",
+      "image": "postgres:15",
+      "state": "running"
+    }
+  ],
+  "ports": [
+    {
+      "port": "3100",
+      "bind": "127.0.0.1",
+      "process": "openclaw-gateway",
+      "exposure": "loopback"
+    },
+    {
+      "port": "8080",
+      "bind": "0.0.0.0",
+      "process": "evolution-api",
+      "exposure": "public"
+    },
+    {
+      "port": "5432",
+      "bind": "127.0.0.1",
+      "process": "evolution-postgres",
+      "exposure": "loopback"
+    }
+  ],
+  "agents": [
+    {
+      "name": "agendamento-medico",
+      "model_id": "openai/gpt-5.4",
+      "tokens_used": 845000,
+      "last_seen": "2026-07-10T17:58:00.000Z",
+      "tokens": {
+        "input": 591500,
+        "output": 253500
+      },
+      "models": {
+        "openai/gpt-5.4": {
+          "input": 591500,
+          "output": 253500
+        }
+      },
+      "sessions_count": 0,
+      "trajectories_count": 0,
+      "events_count": 0
+    },
+    {
+      "name": "agendamento-notes",
+      "model_id": "openai/gpt-5.4",
+      "tokens_used": 320000,
+      "last_seen": "2026-07-10T17:45:00.000Z",
+      "tokens": {
+        "input": 224000,
+        "output": 96000
+      },
+      "models": {
+        "openai/gpt-5.4": {
+          "input": 224000,
+          "output": 96000
+        }
+      },
+      "sessions_count": 0,
+      "trajectories_count": 0,
+      "events_count": 0
+    }
+  ],
+  "mcp_servers": [
+    "google-workspace",
+    "evolution-whatsapp"
+  ],
+  "plugins": [
+    "slack",
+    "medical-automation",
+    "notes-scheduler"
+  ],
+  "timers": [
+    {
+      "name": "health-watchdog",
+      "service": "openclaw-healthcheck.service",
+      "state": "active",
+      "result": "success",
+      "last_trigger_at": "2026-07-10T18:20:00.000Z",
+      "next_due_at": "2026-07-10T18:25:00.000Z"
+    },
+    {
+      "name": "openclaw-observability-collector",
+      "service": "openclaw-collector.service",
+      "state": "active",
+      "result": "success",
+      "last_trigger_at": "2026-07-10T18:15:00.000Z",
+      "next_due_at": "2026-07-10T18:20:00.000Z"
+    }
+  ],
+  "crons": [
+    {
+      "category": "medical-sync",
+      "jobs": 2
+    },
+    {
+      "category": "notes-reconciliation",
+      "jobs": 1
+    }
+  ],
+  "flows": {
+    "medical": {
+      "pending": 1,
+      "completed": 1,
+      "approval_statuses": {
+        "pending": 1,
+        "approved": 1
+      },
+      "updated_at": "2026-07-10T17:55:00.000Z"
+    },
+    "notes": {
+      "proposal_statuses": {
+        "pending_review": 4,
+        "draft": 2,
+        "sent": 8
+      },
+      "errors": 1,
+      "updated_at": "2026-07-10T17:50:00.000Z"
+    }
+  },
+  "logs": [
+    {
+      "name": "agendamento-medico",
+      "size_bytes": 4194304,
+      "line_count": 100,
+      "error_count": 2,
+      "deferred_count": 3,
+      "success_count": 40,
+      "recent_7d": {"lines": 100, "errors": 2, "deferred": 3, "success": 40},
+      "updated_at": "2026-07-10T18:20:00.000Z"
+    },
+    {
+      "name": "agendamento-notes",
+      "size_bytes": 2097152,
+      "line_count": 200,
+      "error_count": 5,
+      "deferred_count": 7,
+      "success_count": 80,
+      "recent_7d": {"lines": 200, "errors": 5, "deferred": 7, "success": 80},
+      "updated_at": "2026-07-10T18:20:00.000Z"
+    },
+    {
+      "name": "openclaw-gateway",
+      "size_bytes": 1048576,
+      "line_count": 50,
+      "error_count": 1,
+      "deferred_count": 0,
+      "success_count": 20,
+      "recent_7d": {"lines": 50, "errors": 1, "deferred": 0, "success": 20},
+      "updated_at": "2026-07-10T18:20:00.000Z"
+    }
+  ],
+  "tokens": {
+    "total": 1165000,
+    "by_agent": [
+      {
+        "name": "agendamento-medico",
+        "tokens_used": 845000,
+        "tokens": {
+          "input": 591500,
+          "output": 253500
+        }
+      },
+      {
+        "name": "agendamento-notes",
+        "tokens_used": 320000,
+        "tokens": {
+          "input": 224000,
+          "output": 96000
+        }
+      }
+    ],
+    "daily": [
+      {
+        "date": "2026-07-09",
+        "tokens_used": 950000,
+        "tokens": {
+          "input": 665000,
+          "output": 285000
+        }
+      },
+      {
+        "date": "2026-07-10",
+        "tokens_used": 1165000,
+        "tokens": {
+          "input": 815500,
+          "output": 349500
+        }
+      }
+    ],
+    "monetary_cost": "unavailable"
+  }
+}
