@@ -13,3 +13,8 @@ coverage/
 test-results/
 playwright-report/
 tsconfig.tsbuildinfo
+scripts/__pycache__/
+*.pyc
+.hermes/plans/
+.hermes/playwright/
+.hypothesis/
