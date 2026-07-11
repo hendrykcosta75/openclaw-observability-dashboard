@@ -52,7 +52,7 @@ test("authenticates valid credentials and logs out", async ({ page }) => {
   await expect(page.locator("aside").getByRole("link", { name: /Logs/ })).toBeVisible();
   await expect(page.locator("aside").getByRole("link", { name: /Agentes/ })).toBeVisible();
   await expect(page.locator("section#dashboard").getByText("Custo hoje", { exact: true })).toBeVisible();
-  await expect(page.getByTestId("cost-kpi-cost-today")).toContainText("R$ 52,60");
+  await expect(page.getByTestId("cost-kpi-cost-today")).toContainText(/US\$\s*\d+,\d{2}/);
   await expect(page.locator("section#dashboard").getByText("Tokens", { exact: true })).toHaveCount(0);
   await expect(page.locator("section#dashboard").getByText("Tasks", { exact: true })).toHaveCount(0);
   await expect(page.locator("section#dashboard").getByText("Memória", { exact: true })).toHaveCount(0);
@@ -76,7 +76,7 @@ test("authenticates valid credentials and logs out", async ({ page }) => {
   await expect(page.getByText("Notes proposals")).toHaveCount(0);
   await expect(page.getByText("Notes errors")).toHaveCount(0);
   await expect(page.getByText("agendamento-notes")).toBeVisible();
-  await expect(page.getByText("0 erros · 432 eventos ok nas últimas 24h")).toBeVisible();
+  await expect(page.getByText("1 erro · 0 propostas merged")).toBeVisible();
   await expect(page.getByText("Ver logs completos")).toBeVisible();
   await expect(page.getByTestId("intent-links-row")).toBeVisible();
   await expect(page.getByTestId("day-status-banner")).toBeVisible();

@@ -19,8 +19,8 @@ test("dashboard notification opens detail modal", async ({ page }) => {
 
   await expect(page.getByRole("dialog", { name: "WhatsApp desconectado no Evolution" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "WhatsApp desconectado no Evolution" })).toBeVisible();
-  await expect(page.getByText("connectionState=close")).toBeVisible();
-  await expect(page.getByText("Reconectar via Evolution manager ou reiniciar a instância medico.")).toBeVisible();
+  await expect(page.getByText("close", { exact: true })).toBeVisible();
+  await expect(page.getByText("Reconectar manualmente pelo Evolution Manager.")).toBeVisible();
 
   await page.getByRole("button", { name: "Fechar" }).click();
   await expect(page.getByRole("dialog", { name: "WhatsApp desconectado no Evolution" })).toHaveCount(0);
@@ -34,5 +34,5 @@ test("header notifications menu opens the same detail modal", async ({ page }) =
 
   const modal = page.getByRole("dialog", { name: "WhatsApp desconectado no Evolution" });
   await expect(modal).toBeVisible();
-  await expect(modal.getByText("Instância medico perdeu sessão com o gateway WhatsApp.")).toBeVisible();
+  await expect(modal.getByText("A instância WhatsApp não está conectada na Evolution.")).toBeVisible();
 });

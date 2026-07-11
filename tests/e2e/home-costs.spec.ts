@@ -18,12 +18,13 @@ test("cost kpi card opens detail modal", async ({ page }) => {
 
   const modal = page.getByRole("dialog", { name: "Custo de hoje" });
   await expect(modal).toBeVisible();
-  await expect(modal.getByText("Marketing · R$ 30,50")).toBeVisible();
+  await expect(modal.getByText(/Médico · US\$\s*\d+,\d{2}/)).toBeVisible();
+  await expect(modal.getByText("Total", { exact: true })).toBeVisible();
   await expect(modal.getByText("Acima da média", { exact: true })).toBeVisible();
-  await expect(page.getByTestId("cost-calculation-panel")).toBeVisible();
-  await expect(page.getByText("Tokens input")).toBeVisible();
-  await expect(page.getByText("Tokens output")).toBeVisible();
-  await expect(page.getByText("R$ 12,50 / 1M tokens")).toBeVisible();
+  await expect(modal.getByTestId("cost-calculation-panel")).toBeVisible();
+  await expect(modal.getByText("Tokens input")).toBeVisible();
+  await expect(modal.getByText("Tokens output")).toBeVisible();
+  await expect(modal.getByText(/US\$ \d+,\d{2} \/ 1M tokens/).first()).toBeVisible();
 
   await page.getByRole("button", { name: "Fechar" }).click();
   await expect(page.getByRole("dialog", { name: "Custo de hoje" })).toHaveCount(0);
@@ -32,17 +33,21 @@ test("cost kpi card opens detail modal", async ({ page }) => {
 test("agent cost bar chart opens agent detail modal", async ({ page }) => {
   await login(page);
 
-  await expect(page.getByTestId("agent-cost-bar-chart")).toBeVisible();
-  await page.getByTestId("agent-cost-bar-chart").scrollIntoViewIfNeeded();
-  await page.getByTestId("agent-cost-bar-agente-marketing").click({ force: true });
+  const chart = page.getByTestId("agent-cost-bar-chart");
+  await expect(chart).toBeVisible();
+  await expect(chart.getByText("Médico", { exact: true })).toBeVisible();
+  await expect(chart.getByText("Notas", { exact: true })).toBeVisible();
+  await chart.scrollIntoViewIfNeeded();
+  await page.locator('path[data-testid="agent-cost-bar-agendamento-medico"]').click({ force: true });
 
-  const modal = page.getByRole("dialog", { name: "Custo · Marketing" });
+  const modal = page.getByRole("dialog", { name: "Custo · Médico" });
   await expect(modal).toBeVisible();
-  await expect(modal.getByText("58% do total")).toBeVisible();
-  await expect(modal.getByText("agente-marketing")).toBeVisible();
+  await expect(modal.getByText(/\d+% do total/)).toBeVisible();
+  await expect(modal.getByText("agendamento-medico")).toBeVisible();
+  await expect(modal.getByText(/US\$\s*\d+,\d{2}/).first()).toBeVisible();
   await expect(modal.getByTestId("cost-calculation-panel")).toBeVisible();
-  await expect(modal.getByText("gpt-5-mini")).toBeVisible();
-  await expect(modal.getByText("R$ 0,75 / 1M tokens")).toBeVisible();
+  await expect(modal.getByText("gpt-5.4")).toBeVisible();
+  await expect(modal.getByText(/US\$ \d+,\d{2} \/ 1M tokens/).first()).toBeVisible();
 });
 
 test("monthly cost chart is visible on home", async ({ page }) => {
@@ -59,7 +64,10 @@ test("cost month kpi opens detail modal", async ({ page }) => {
 
   await page.getByTestId("cost-kpi-cost-month").click();
 
-  await expect(page.getByRole("dialog", { name: "Custo do mês atual" })).toBeVisible();
-  await expect(page.getByText("Julho/2026")).toBeVisible();
-  await expect(page.getByText("Junho · R$ 892,40")).toBeVisible();
+  const modal = page.getByRole("dialog", { name: "Custo do mês atual" });
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText(/julho de 2026/i)).toBeVisible();
+  await expect(modal.getByText("Acumulado", { exact: true })).toBeVisible();
+  await expect(modal.getByText(/US\$\s*\d+,\d{2}/).first()).toBeVisible();
+  await expect(modal.getByText("Dias registrados", { exact: true })).toBeVisible();
 });

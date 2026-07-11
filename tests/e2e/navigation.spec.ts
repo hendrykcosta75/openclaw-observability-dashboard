@@ -45,14 +45,14 @@ test("logs detail page shows state buckets", async ({ page }) => {
 
   await expect(page.getByText("Fluxo médico")).toBeVisible();
   await expect(page.getByText("Notes proposals")).toBeVisible();
-  await expect(page.getByText("agendamento-notes.log")).toBeVisible();
+  await expect(page.getByText("agendamento-notes", { exact: true })).toBeVisible();
 });
 
 test("custos detail page shows instrumentation status", async ({ page }) => {
   await login(page);
   await page.goto("/custos");
 
-  await expect(page.getByText("Tokens not instrumented yet")).toBeVisible();
+  await expect(page.getByText("Tokens coletados do snapshot real com input e output discriminados.")).toBeVisible();
   await expect(page.getByText("Custo ao Longo do Tempo")).toBeVisible();
   await expect(page.getByText("Próximos passos")).toHaveCount(0);
   await expect(page.getByText("Backlog", { exact: true })).toHaveCount(0);
