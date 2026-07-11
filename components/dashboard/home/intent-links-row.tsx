@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { intentLinks } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 
 export function IntentLinksRow() {
+  const { intentLinks } = useSnapshot();
+
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-2" data-testid="intent-links-row">
       {intentLinks.map((link) => (

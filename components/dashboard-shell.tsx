@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Card } from "@heroui/react";
 import { ArrowRight, HeartPulse, ScrollText, Server } from "lucide-react";
-import { errorHighlights, serviceHealthSummary } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { Header } from "./dashboard/header";
 import { Sidebar } from "./dashboard/sidebar";
 import { AgentCostBarChart } from "./dashboard/costs/agent-cost-bar-chart";
@@ -17,12 +17,12 @@ import { CostContextLine } from "./dashboard/home/cost-context-line";
 import { DayStatusBanner } from "./dashboard/home/day-status-banner";
 import { FlowSummaryCards } from "./dashboard/home/flow-summary-cards";
 import { IntentLinksRow } from "./dashboard/home/intent-links-row";
-import { WhatsAppStatusCard } from "./dashboard/home/whatsapp-status-card";
 import { HealthMark } from "./dashboard/shared/health-mark";
 import { mono } from "./dashboard/shared/mono";
 import { SectionTitle } from "./dashboard/shared/section-title";
 
 function ServicesHealthPanel() {
+  const { serviceHealthSummary } = useSnapshot();
   return (
     <Card className="p-4">
       <Card.Header className="flex flex-row items-center justify-between p-0">
@@ -51,9 +51,10 @@ function ServicesHealthPanel() {
 }
 
 function ErrorsSummaryPanel() {
+  const { errorHighlights } = useSnapshot();
   return (
     <section id="logs" className="space-y-5">
-      <SectionTitle eyebrow="Incidentes" title="Problemas recentes" description="Resumo das fontes monitoradas nas últimas 24h." icon={ScrollText} />
+      <SectionTitle eyebrow="Incidentes" title="Problemas recentes" description="Resumo das fontes monitoradas; a janela temporal depende dos contadores disponíveis." icon={ScrollText} />
       <Card className="overflow-hidden p-0">
         {errorHighlights.map((row, index) => (
           <div key={row.source} className={`flex flex-col gap-2 px-4 py-4 sm:flex-row sm:items-center sm:justify-between ${index > 0 ? "border-t border-border-dim" : ""}`}>
@@ -110,7 +111,6 @@ export default function DashboardShell() {
                 <MonthlyCostChart />
               </div>
               <section id="gateway" className="space-y-5">
-                <WhatsAppStatusCard />
                 <SectionTitle eyebrow="Gateway" title="Saúde dos serviços" description="Estado resumido dos componentes principais." icon={HeartPulse} />
                 <ServicesHealthPanel />
               </section>

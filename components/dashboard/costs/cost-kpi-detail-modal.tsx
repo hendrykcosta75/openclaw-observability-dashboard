@@ -40,7 +40,7 @@ export function CostKpiDetailModal({
               ))}
             </div>
             <CostCalculationPanel tokens={kpi.tokens} calculationBases={kpi.calculationBases} />
-            <p className="text-xs text-subtle" style={mono}>Valores estimados · mock até coletor real</p>
+            <p className="text-xs text-subtle" style={mono}>Valores estimados com tokens reais e taxas de referência</p>
           </Modal.Body>
           <Modal.Footer>
             <Button slot="close" variant="secondary">Fechar</Button>

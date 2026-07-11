@@ -2,15 +2,16 @@
 
 import React from "react";
 import { Card } from "@heroui/react";
-import { monthlyCostYearData } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { fmtTokens } from "./cost-calculation-panel";
 
-function fmtBrl(value: number) {
-  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+function fmtUsd(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "USD" });
 }
 
 export function MonthlyCostChart() {
+  const { monthlyCostYearData } = useSnapshot();
   const [hoverIdx, setHoverIdx] = React.useState<number | null>(null);
   const chartData = monthlyCostYearData;
   const values = chartData.map((d) => d.cost);
@@ -32,7 +33,9 @@ export function MonthlyCostChart() {
         const cpx = (prev.x + point.x) / 2;
         return `${path} C${cpx},${prev.y} ${cpx},${point.y} ${point.x},${point.y}`;
       }, `M${points[0].x},${points[0].y}`)
-    : "";
+    : points.length === 1
+      ? `M${Math.max(points[0].x - 32, padX)},${points[0].y} L${Math.min(points[0].x + 32, padX + chartW)},${points[0].y}`
+      : "";
   const areaPath = linePath ? `${linePath} L${points[points.length - 1].x},${padY + chartH} L${points[0].x},${padY + chartH} Z` : "";
 
   return (
@@ -40,11 +43,23 @@ export function MonthlyCostChart() {
       <Card.Header className="mb-4 p-0">
         <div>
           <Card.Title className="text-base font-semibold text-heading">Evolução de custos por mês</Card.Title>
-          <Card.Description className="text-sm text-subtle" style={mono}>2026 · valores estimados</Card.Description>
+          <Card.Description className="text-sm text-subtle" style={mono}>
+            {chartData.length > 0 ? `2026 · ${chartData.length} ${chartData.length === 1 ? "mês registrado" : "meses registrados"} · valores estimados` : "Sem meses com tokens observados"}
+          </Card.Description>
         </div>
       </Card.Header>
       <Card.Content className="p-0">
         <div className="relative" style={{ height: 180 }} data-testid="monthly-cost-chart">
+          {chartData.length === 0 && (
+            <div
+              data-testid="monthly-cost-empty"
+              className="flex h-full items-center justify-center rounded-lg text-center text-sm text-subtle"
+              style={{ border: "1px dashed rgba(255,255,255,0.08)", ...mono }}
+            >
+              Sem histórico mensal disponível.<br />
+              O ledger ainda não registrou tokens com data.
+            </div>
+          )}
           <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{ height: "100%", display: "block" }} preserveAspectRatio="none">
             <defs>
               <linearGradient id={areaGradId} x1="0" y1="0" x2="0" y2="1">
@@ -108,7 +123,7 @@ export function MonthlyCostChart() {
                 whiteSpace: "nowrap",
               }}
             >
-              <span style={{ color: "#D4835A", fontWeight: 600 }}>{fmtBrl(values[hoverIdx])}</span>
+              <span style={{ color: "#D4835A", fontWeight: 600 }}>{fmtUsd(values[hoverIdx])}</span>
               <span style={{ color: "rgba(255,255,255,0.3)", marginLeft: 6 }}>
                 {chartData[hoverIdx].label}{chartData[hoverIdx].partial ? " · parcial" : ""}
               </span>
@@ -129,7 +144,7 @@ export function MonthlyCostChart() {
 
         <div className="mt-3 flex justify-end">
           <div className="rounded-lg px-3 py-1.5 text-xs font-medium text-white" style={{ ...mono, border: "1px solid #1e1e1e", background: "linear-gradient(135deg, #ff6b2c, #ff8533)" }}>
-            R$
+            US$
           </div>
         </div>
       </Card.Content>

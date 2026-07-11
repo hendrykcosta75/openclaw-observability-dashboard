@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
-import { dayStatus, snapshotMeta } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 
 const toneStyles = {
@@ -28,6 +28,7 @@ const toneStyles = {
 } as const;
 
 export function DayStatusBanner() {
+  const { dayStatus, snapshotMeta } = useSnapshot();
   const style = toneStyles[dayStatus.tone];
   const Icon = style.icon;
 

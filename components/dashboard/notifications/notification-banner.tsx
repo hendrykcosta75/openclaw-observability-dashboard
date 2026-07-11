@@ -2,11 +2,12 @@
 
 import React from "react";
 import { AlertTriangle, ChevronRight } from "lucide-react";
-import { dashboardNotifications } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { NotificationDetailModal } from "./notification-detail-modal";
 
 export function NotificationBanner() {
+  const { dashboardNotifications } = useSnapshot();
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const selected = dashboardNotifications.find((item) => item.id === selectedId) ?? null;
 

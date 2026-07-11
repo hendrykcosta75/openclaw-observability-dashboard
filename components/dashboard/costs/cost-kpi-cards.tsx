@@ -3,7 +3,7 @@
 import React from "react";
 import { Card } from "@heroui/react";
 import { ChevronRight, TrendingDown, TrendingUp } from "lucide-react";
-import { costKpiCards } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { CostKpiDetailModal } from "./cost-kpi-detail-modal";
 
@@ -14,6 +14,7 @@ function TrendIcon({ trend }: { trend: "up" | "down" | "flat" }) {
 }
 
 export function CostKpiCards() {
+  const { costKpiCards } = useSnapshot();
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const selected = costKpiCards.find((item) => item.id === selectedId) ?? null;
 

@@ -3,12 +3,13 @@
 import React from "react";
 import { Card } from "@heroui/react";
 import { MessageCircle, ChevronRight } from "lucide-react";
-import { whatsAppChannelStatus, dashboardNotifications } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { NotificationDetailModal } from "../notifications/notification-detail-modal";
 import { HealthMark } from "../shared/health-mark";
 import { mono } from "../shared/mono";
 
 export function WhatsAppStatusCard() {
+  const { whatsAppChannelStatus, dashboardNotifications } = useSnapshot();
   const [open, setOpen] = React.useState(false);
   const notification = dashboardNotifications.find((item) => item.id === "evolution-whatsapp-disconnected") ?? null;
 

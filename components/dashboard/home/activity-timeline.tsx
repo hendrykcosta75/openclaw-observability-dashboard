@@ -2,11 +2,12 @@
 
 import { Card } from "@heroui/react";
 import { Clock3 } from "lucide-react";
-import { activityTimeline } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { HealthMark } from "../shared/health-mark";
 import { mono } from "../shared/mono";
 
 export function ActivityTimeline() {
+  const { activityTimeline } = useSnapshot();
   return (
     <Card className="p-4" data-testid="activity-timeline">
       <Card.Header className="flex flex-row items-center justify-between p-0">

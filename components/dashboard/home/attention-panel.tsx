@@ -4,12 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { Card } from "@heroui/react";
 import { ChevronRight, ListChecks } from "lucide-react";
-import { attentionItems, dashboardNotifications } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { NotificationDetailModal } from "../notifications/notification-detail-modal";
 import { HealthMark } from "../shared/health-mark";
 import { mono } from "../shared/mono";
 
 export function AttentionPanel() {
+  const { attentionItems, dashboardNotifications } = useSnapshot();
   const [notificationId, setNotificationId] = React.useState<string | null>(null);
   const selectedNotification = dashboardNotifications.find((item) => item.id === notificationId) ?? null;
 

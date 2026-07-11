@@ -3,18 +3,19 @@
 import React from "react";
 import { Card } from "@heroui/react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { agentCostRows } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { AgentCostDetailModal } from "./agent-cost-detail-modal";
 import { fmtTokens } from "./cost-calculation-panel";
 
-function fmtBrl(value: number) {
-  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+function fmtUsd(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "USD" });
 }
 
 const BAR_COLORS = ["#D4835A", "#ff8533", "#E8712A"];
 
 export function AgentCostBarChart() {
+  const { agentCostRows } = useSnapshot();
   const [selectedAgentId, setSelectedAgentId] = React.useState<string | null>(null);
   const selected = agentCostRows.find((item) => item.agentId === selectedAgentId) ?? null;
 
@@ -47,7 +48,7 @@ export function AgentCostBarChart() {
                   tickLine={false}
                 />
                 <YAxis
-                  tickFormatter={(v) => `R$${v}`}
+                  tickFormatter={(v) => `US$${v}`}
                   tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 10, fontFamily: "'JetBrains Mono', monospace" }}
                   axisLine={false}
                   tickLine={false}
@@ -61,7 +62,7 @@ export function AgentCostBarChart() {
                     return (
                       <div className="rounded-lg border border-border-dim bg-[#1a1a1a] px-2.5 py-1.5 text-[11px] shadow-lg" style={mono}>
                         <div>
-                          <span className="text-[#D4835A] font-semibold">{fmtBrl(row.cost)}</span>
+                          <span className="text-[#D4835A] font-semibold">{fmtUsd(row.cost)}</span>
                           <span className="ml-2 text-subtle">{row.label}</span>
                         </div>
                         <div className="mt-1 text-subtle">
@@ -71,17 +72,15 @@ export function AgentCostBarChart() {
                     );
                   }}
                 />
-                <Bar
-                  dataKey="cost"
-                  radius={[6, 6, 0, 0]}
-                  onClick={(_data, index) => {
-                    const row = chartData[index];
-                    if (row) setSelectedAgentId(row.agentId);
-                  }}
-                  className="cursor-pointer"
-                >
+                <Bar dataKey="cost" radius={[6, 6, 0, 0]} isAnimationActive={false}>
                   {chartData.map((entry, index) => (
-                    <Cell key={entry.agentId} fill={BAR_COLORS[index % BAR_COLORS.length]} data-testid={`agent-cost-bar-${entry.agentId}`} />
+                    <Cell
+                      key={entry.agentId}
+                      fill={BAR_COLORS[index % BAR_COLORS.length]}
+                      data-testid={`agent-cost-bar-${entry.agentId}`}
+                      className="cursor-pointer"
+                      onClick={() => setSelectedAgentId(entry.agentId)}
+                    />
                   ))}
                 </Bar>
               </BarChart>

@@ -3,11 +3,12 @@
 import React from "react";
 import { Button, Dropdown } from "@heroui/react";
 import { AlertTriangle, Bell } from "lucide-react";
-import { dashboardNotifications } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { NotificationDetailModal } from "./notification-detail-modal";
 
 export function NotificationsMenu() {
+  const { dashboardNotifications } = useSnapshot();
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const selected = dashboardNotifications.find((item) => item.id === selectedId) ?? null;
   const count = dashboardNotifications.length;

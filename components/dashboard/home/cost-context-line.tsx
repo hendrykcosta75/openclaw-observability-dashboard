@@ -1,8 +1,9 @@
 "use client";
 
-import { costContextInsight } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 
 export function CostContextLine() {
+  const { costContextInsight } = useSnapshot();
   return (
     <div className="space-y-1" data-testid="cost-context-line">
       <p className="text-sm text-body">{costContextInsight.line}</p>

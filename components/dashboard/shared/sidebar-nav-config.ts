@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   LucideIcon,
   ScrollText,
+  Settings,
 } from "lucide-react";
 
 export type SidebarNavItem = {
@@ -21,4 +22,5 @@ export const sidebarNav: SidebarNavItem[] = [
   { label: "Gateway", href: "/gateway", icon: HeartPulse },
   { label: "Crons", href: "/crons", icon: Clock3 },
   { label: "Custos", href: "/custos", icon: CircleDollarSign },
+  { label: "Configuração", href: "/custos/precos", icon: Settings },
 ];

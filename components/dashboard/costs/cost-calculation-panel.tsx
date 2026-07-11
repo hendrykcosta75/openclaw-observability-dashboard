@@ -34,13 +34,15 @@ export function CostCalculationPanel({
         </div>
       </div>
       <div className="space-y-2">
-        {calculationBases.map((basis) => (
+        {calculationBases.length > 0 ? calculationBases.map((basis) => (
           <div key={`${basis.provider}-${basis.modelId}`} className="rounded-[10px] border border-border-dim bg-dim/50 px-3 py-2">
             <p className="text-xs text-heading" style={mono}>{basis.provider} · {basis.modelId}</p>
             <p className="mt-1 text-xs text-subtle" style={mono}>Input: {basis.inputRatePer1M}</p>
             <p className="text-xs text-subtle" style={mono}>Output: {basis.outputRatePer1M}</p>
           </div>
-        ))}
+        )) : (
+          <p className="text-xs text-subtle" style={mono}>Nenhum modelo tarifado observado neste período.</p>
+        )}
       </div>
     </div>
   );

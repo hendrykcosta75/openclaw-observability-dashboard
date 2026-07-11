@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { Card } from "@heroui/react";
 import { ChevronRight } from "lucide-react";
-import { flowSummaryCards } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { HealthMark } from "../shared/health-mark";
 import { mono } from "../shared/mono";
 
 export function FlowSummaryCards() {
+  const { flowSummaryCards } = useSnapshot();
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" data-testid="flow-summary-cards">
       {flowSummaryCards.map((flow) => (

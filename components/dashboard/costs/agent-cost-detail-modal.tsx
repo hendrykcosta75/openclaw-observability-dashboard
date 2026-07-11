@@ -6,8 +6,8 @@ import type { AgentCostRow } from "@/lib/openclaw-snapshot";
 import { mono } from "../shared/mono";
 import { CostCalculationPanel } from "./cost-calculation-panel";
 
-function fmtBrl(value: number) {
-  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+function fmtUsd(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "USD" });
 }
 
 function fmtDate(iso: string) {
@@ -46,10 +46,10 @@ export function AgentCostDetailModal({
           <Modal.Body className="space-y-4">
             <div className="grid gap-2">
               {[
-                { label: "Total 7 dias", value: fmtBrl(agent.cost7d) },
-                { label: "Hoje", value: fmtBrl(agent.costToday) },
-                { label: "Média diária", value: fmtBrl(avgDaily) },
-                { label: "Dia mais caro", value: `${fmtDate(peakDay.date)} · ${fmtBrl(peakDay.cost)}` },
+                { label: "Total 7 dias", value: fmtUsd(agent.cost7d) },
+                { label: "Hoje", value: fmtUsd(agent.costToday) },
+                { label: "Média diária", value: fmtUsd(avgDaily) },
+                { label: "Dia mais caro", value: `${fmtDate(peakDay.date)} · ${fmtUsd(peakDay.cost)}` },
                 { label: "Participação", value: `${agent.sharePercent}% do total` },
                 { label: "ID", value: agent.agentId },
               ].map((item) => (
@@ -60,7 +60,7 @@ export function AgentCostDetailModal({
               ))}
             </div>
             <CostCalculationPanel tokens={agent.tokens7d} calculationBases={agent.calculationBases} />
-            <p className="text-xs text-subtle" style={mono}>Valores estimados · mock até coletor real</p>
+            <p className="text-xs text-subtle" style={mono}>Valores estimados com tokens reais e taxas de referência</p>
           </Modal.Body>
           <Modal.Footer>
             <Button slot="close" variant="secondary">Fechar</Button>

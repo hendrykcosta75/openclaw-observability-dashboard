@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Card } from "@heroui/react";
-import { usageChartData } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "./mono";
 
 function fmtChartDate(iso: string) {
@@ -12,11 +12,12 @@ function fmtChartDate(iso: string) {
 }
 
 export function UsageChart({ id, gradientId }: { id?: string; gradientId?: string }) {
+  const { usageChartData } = useSnapshot();
   const [hoverIdx, setHoverIdx] = React.useState<number | null>(null);
   const usageData = usageChartData;
   const values = usageData.map((d) => d.cost);
   const max = Math.max(...values, 1);
-  const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "USD" });
   const w = 510;
   const h = 170;
   const padX = 5;
@@ -36,14 +37,17 @@ export function UsageChart({ id, gradientId }: { id?: string; gradientId?: strin
       }, `M${points[0].x},${points[0].y}`)
     : "";
   const areaPath = linePath ? `${linePath} L${points[points.length - 1].x},${padY + chartH} L${points[0].x},${padY + chartH} Z` : "";
-  const labelIndices = [0, 4, 9, usageData.length - 1];
+  const lastIndex = usageData.length - 1;
+  const labelIndices = usageData.length === 0
+    ? []
+    : Array.from(new Set([0, Math.floor(lastIndex / 3), Math.floor((lastIndex * 2) / 3), lastIndex]));
 
   return (
     <Card id={id} className="p-6">
       <Card.Header className="mb-4 p-0">
         <div>
           <Card.Title className="text-base font-semibold text-heading">Custo ao Longo do Tempo</Card.Title>
-          <Card.Description className="text-sm text-subtle" style={mono}>Valores mockados em reais — últimos 14 dias</Card.Description>
+          <Card.Description className="text-sm text-subtle" style={mono}>Valores estimados com taxas de referência — últimos 7 dias</Card.Description>
         </div>
       </Card.Header>
       <Card.Content className="p-0">
@@ -125,7 +129,7 @@ export function UsageChart({ id, gradientId }: { id?: string; gradientId?: strin
 
         <div className="mt-3 flex justify-end">
           <div className="rounded-lg px-3 py-1.5 text-xs font-medium text-white" style={{ ...mono, border: "1px solid #1e1e1e", background: "linear-gradient(135deg, #ff6b2c, #ff8533)" }}>
-            R$
+            US$
           </div>
         </div>
       </Card.Content>

@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { sidebarStats } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "./shared/mono";
+import { getSnapshotIcon } from "./shared/snapshot-icon";
 import { sidebarNav } from "./shared/sidebar-nav-config";
 
 function isActive(pathname: string, href: string) {
@@ -14,6 +15,7 @@ function isActive(pathname: string, href: string) {
 
 export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const pathname = usePathname();
+  const { sidebarStats } = useSnapshot();
 
   return (
     <>
@@ -73,7 +75,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
         <div className="border-t border-border-dim p-3">
           <div className="grid grid-cols-3 gap-2">
             {sidebarStats.map((stat) => {
-              const Icon = stat.icon;
+              const Icon = getSnapshotIcon(stat.icon);
               return (
                 <div key={stat.label} className="rounded-[12px] bg-dim p-2 text-center">
                   <Icon size={14} className="mx-auto mb-1 text-[#D4835A]" />
