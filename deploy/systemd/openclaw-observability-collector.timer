@@ -1,0 +1,12 @@
+[Unit]
+Description=Run OpenClaw observability collector every 15 seconds
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=15s
+AccuracySec=1s
+Persistent=true
+Unit=openclaw-observability-collector.service
+
+[Install]
+WantedBy=timers.target

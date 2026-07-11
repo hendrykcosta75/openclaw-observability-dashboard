@@ -1,0 +1,16 @@
+[Unit]
+Description=Collect sanitized OpenClaw observability snapshot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/ubuntu/openclaw-observability-dashboard
+User=ubuntu
+Group=ubuntu
+ExecStart=/usr/bin/python3 /home/ubuntu/openclaw-observability-dashboard/scripts/collect-openclaw-snapshot.py --output /home/ubuntu/openclaw-observability-dashboard/data/openclaw-snapshot.json
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/home/ubuntu/openclaw-observability-dashboard/data
+TimeoutStartSec=45
