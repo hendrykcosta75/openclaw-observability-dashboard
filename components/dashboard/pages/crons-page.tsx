@@ -1,10 +1,16 @@
+"use client";
+
 import { Card } from "@heroui/react";
 import { Clock3 } from "lucide-react";
-import { cronCategoryGroups, cronRows, snapshotMeta, timerRows } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { SectionTitle } from "../shared/section-title";
 
 export function CronsPage() {
+  const { cronCategoryGroups, cronRows, snapshotMeta, timerRows, sidebarStats } = useSnapshot();
+  const cronCount = sidebarStats.find((stat) => stat.label === "Crons")?.value ?? "—";
+  const timerCount = sidebarStats.find((stat) => stat.label === "Timers")?.value ?? "—";
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col gap-1">
@@ -18,11 +24,11 @@ export function CronsPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="glass-card p-4">
           <Card.Header className="p-0"><Card.Title className="text-sm text-subtle">Crons de usuário</Card.Title></Card.Header>
-          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>7</p></Card.Content>
+          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>{cronCount}</p></Card.Content>
         </Card>
         <Card className="glass-card p-4">
           <Card.Header className="p-0"><Card.Title className="text-sm text-subtle">Timers systemd</Card.Title></Card.Header>
-          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>8</p></Card.Content>
+          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>{timerCount}</p></Card.Content>
         </Card>
       </div>
 

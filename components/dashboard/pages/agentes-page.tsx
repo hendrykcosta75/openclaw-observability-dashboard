@@ -1,15 +1,26 @@
+"use client";
+
 import { Card } from "@heroui/react";
 import { Bot } from "lucide-react";
-import { agentDetails, agentRows, snapshotMeta } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { HealthMark } from "../shared/health-mark";
 import { mono } from "../shared/mono";
 import { SectionTitle } from "../shared/section-title";
 
-function sumField(field: "sessions" | "trajectories") {
-  return agentRows.reduce((acc, row) => acc + Number.parseInt(row[field], 10), 0);
-}
-
 export function AgentesPage() {
+  const { agentDetails, agentRows, snapshotMeta } = useSnapshot();
+
+  function sumField(field: "sessions" | "trajectories") {
+    let found = false;
+    const total = agentRows.reduce((acc, row) => {
+      const value = Number.parseInt(row[field], 10);
+      if (!Number.isFinite(value)) return acc;
+      found = true;
+      return acc + value;
+    }, 0);
+    return found ? total : null;
+  }
+
   const totalSessions = sumField("sessions");
   const totalTrajectories = sumField("trajectories");
 
@@ -26,11 +37,11 @@ export function AgentesPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="glass-card p-4">
           <Card.Header className="p-0"><Card.Title className="text-sm text-subtle">Sessões totais</Card.Title></Card.Header>
-          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>{totalSessions}</p></Card.Content>
+          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>{totalSessions ?? "—"}</p></Card.Content>
         </Card>
         <Card className="glass-card p-4">
           <Card.Header className="p-0"><Card.Title className="text-sm text-subtle">Trajetórias totais</Card.Title></Card.Header>
-          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>{totalTrajectories}</p></Card.Content>
+          <Card.Content className="p-0 pt-2"><p className="text-2xl font-bold text-heading" style={mono}>{totalTrajectories ?? "—"}</p></Card.Content>
         </Card>
       </div>
 
@@ -70,7 +81,7 @@ export function AgentesPage() {
                   <p className="text-heading" style={mono}>{detail.modelId}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-subtle" style={mono}>Eventos recentes</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-subtle" style={mono}>Eventos observados</p>
                   <p className="text-body" style={mono}>{detail.recentEvents}</p>
                 </div>
                 <div>

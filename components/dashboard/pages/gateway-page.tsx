@@ -1,11 +1,15 @@
+"use client";
+
 import { Card } from "@heroui/react";
 import { HeartPulse, Server } from "lucide-react";
-import { gatewayDetails, portSummaries, serviceRows, snapshotMeta } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { HealthMark } from "../shared/health-mark";
 import { mono } from "../shared/mono";
 import { SectionTitle } from "../shared/section-title";
 
 export function GatewayPage() {
+  const { gatewayDetails, portSummaries, serviceRows, snapshotMeta } = useSnapshot();
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col gap-1">

@@ -1,11 +1,15 @@
+"use client";
+
 import { Card } from "@heroui/react";
 import { CircleDollarSign } from "lucide-react";
-import { costDetails, snapshotMeta } from "@/lib/openclaw-snapshot";
+import { useSnapshot } from "@/components/dashboard/snapshot-context";
 import { mono } from "../shared/mono";
 import { SectionTitle } from "../shared/section-title";
 import { UsageChart } from "../shared/usage-chart";
 
 export function CustosPage() {
+  const { costDetails, snapshotMeta } = useSnapshot();
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col gap-1">
@@ -19,7 +23,7 @@ export function CustosPage() {
       <UsageChart gradientId="openclawUsageAreaGradDetail" />
 
       <section className="space-y-5">
-        <SectionTitle eyebrow="Instrumentação" title="Estado da coleta" description="Fase 1 — sem valores confirmados por provider até o coletor real." icon={CircleDollarSign} />
+        <SectionTitle eyebrow="Instrumentação" title="Estado da coleta" description="Tokens reais dos JSONL, com input/output separados e custo estimado por taxas de referência." icon={CircleDollarSign} />
         <div className="grid gap-4 lg:grid-cols-2">
           <Card className="glass-card p-4">
             <Card.Header className="p-0">
@@ -32,7 +36,7 @@ export function CustosPage() {
           </Card>
           <Card className="glass-card p-4">
             <Card.Header className="p-0">
-              <Card.Title className="text-base text-heading" style={mono}>Price map</Card.Title>
+              <Card.Title className="text-base text-heading" style={mono}>Mapa de preços</Card.Title>
             </Card.Header>
             <Card.Content className="mt-3 p-0">
               <p className="text-sm text-body">{costDetails.priceMapStatus}</p>
