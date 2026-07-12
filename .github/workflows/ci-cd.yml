@@ -92,6 +92,9 @@ jobs:
             set -e
             cd /home/ubuntu/openclaw-observability-dashboard
             [ -f .env ] || cp .env.example .env
+            # Kill any stale Next.js build that may be holding the cache lock
+            pkill -f 'next build' || true
+            rm -f .next/build.lock
             yarn install --frozen-lockfile
             yarn build
             systemctl --user daemon-reload
