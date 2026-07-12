@@ -85,17 +85,16 @@ jobs:
             -e ssh \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/ubuntu/openclaw-observability-dashboard/
 
-      - name: Install deps and build on server
+      - name: Install deps, build and restart services
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<'REMOTE'
             set -e
             cd /home/ubuntu/openclaw-observability-dashboard
-            # Ensure env file exists on server (not overwritten by rsync)
             [ -f .env ] || cp .env.example .env
             yarn install --frozen-lockfile
             yarn build
-            # Restart services
-            sudo systemctl restart openclaw-observability-dashboard.service
-            sudo systemctl restart openclaw-observability-collector.timer
-            sudo systemctl restart openclaw-observability-collector.service
+            systemctl --user daemon-reload
+            systemctl --user restart openclaw-observability-dashboard.service
+            systemctl --user restart openclaw-observability-collector.timer
+            systemctl --user restart openclaw-observability-collector.service
           REMOTE
