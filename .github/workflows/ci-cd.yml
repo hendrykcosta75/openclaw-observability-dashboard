@@ -114,9 +114,9 @@ jobs:
             -Dsonar.qualitygate.wait=true
             -Dsonar.qualitygate.timeout=300
 
-      - name: Wait before retrying a transient SonarQube failure
+      - name: Wait 130 seconds before retrying a transient SonarQube failure
         if: steps.sonar_scan.outcome == 'failure'
-        run: sleep 10
+        run: sleep 130
 
       - name: Retry SonarQube scan and wait for the quality gate
         if: steps.sonar_scan.outcome == 'failure'
