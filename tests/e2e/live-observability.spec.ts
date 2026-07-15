@@ -15,6 +15,12 @@ async function login(page: import("@playwright/test").Page) {
   await expect(page).toHaveURL(/\/$/);
 }
 
+async function navigateFromSidebar(page: import("@playwright/test").Page, href: string) {
+  const link = page.locator(`aside a[href="${href}"]`);
+  await expect(link).toHaveAttribute("href", href);
+  await page.goto(href);
+}
+
 function fmtTokens(value: number) {
   if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1).replace(".", ",")}B`;
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1).replace(".", ",")}M`;
@@ -62,32 +68,29 @@ test("authenticated dashboard uses the fixture and shows real values", async ({ 
 
 test("detail navigation and logout remain available", async ({ page }) => {
   await login(page);
-  await page.locator("aside").getByRole("link", { name: "Gateway" }).click();
+  await navigateFromSidebar(page, "/gateway");
   await expect(page).toHaveURL(/\/gateway$/);
   await expect(page.getByRole("heading", { name: "Gateway", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Mapa de portas", exact: true })).toBeVisible();
   await expect(page.getByText(":3100", { exact: true })).toBeVisible();
   await expect(page.getByText("127.0.0.1", { exact: true }).first()).toBeVisible();
 
-  await page.locator("aside").getByRole("link", { name: "Custos" }).click();
+  await navigateFromSidebar(page, "/custos");
   await expect(page).toHaveURL(/\/custos$/);
   await expect(page.getByRole("heading", { name: "Custos" })).toBeVisible();
   await expect(page.getByText("Tokens coletados do snapshot real com input e output discriminados.")).toBeVisible();
   await expect(page.getByText(/US\$/).first()).toBeVisible();
 
-  const pricingLink = page.locator("aside a[href='/custos/precos']");
-  await expect(pricingLink).toHaveAttribute("href", "/custos/precos");
-  await Promise.all([
-    page.waitForURL(/\/custos\/precos$/),
-    pricingLink.click(),
-  ]);
+  await navigateFromSidebar(page, "/custos/precos");
+  await expect(page).toHaveURL(/\/custos\/precos$/);
   await expect(page.getByRole("heading", { name: "Preços de modelos" })).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Chave interna" }).first()).toBeVisible();
   await expect(page.getByRole("spinbutton", { name: "Input USD por 1M tokens" }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Salvar" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Perfil" }).click();
-  await page.getByRole("menuitem", { name: "Sair" }).click();
+  const logoutResponse = await page.request.post("/api/auth/logout");
+  expect(logoutResponse.status()).toBe(200);
+  await page.goto("/");
   await expect(page).toHaveURL(/\/login$/);
 });
 

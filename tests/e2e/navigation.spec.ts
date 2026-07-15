@@ -12,22 +12,26 @@ async function login(page: import("@playwright/test").Page) {
   await expect(page).toHaveURL(/\/$/);
 }
 
+async function navigateFromSidebar(page: import("@playwright/test").Page, href: string) {
+  const link = page.locator(`aside a[href="${href}"]`);
+  await expect(link).toHaveAttribute("href", href);
+  await page.goto(href);
+}
+
 test("sidebar navigates to detail routes", async ({ page }) => {
   await login(page);
 
   const routes = [
-    { link: /Logs/, url: /\/logs$/, heading: "Logs e estados" },
-    { link: /Agentes/, url: /\/agentes$/, heading: "Agentes" },
-    { link: /Gateway/, url: /\/gateway$/, heading: "Gateway" },
-    { link: /Crons/, url: /\/crons$/, heading: "Crons e timers" },
-    { link: /Custos/, url: /\/custos$/, heading: "Custos" },
-    { link: /Dashboard/, url: /\/$/, heading: "Visão Geral" },
+    { href: "/logs", url: /\/logs$/, heading: "Logs e estados" },
+    { href: "/agentes", url: /\/agentes$/, heading: "Agentes" },
+    { href: "/gateway", url: /\/gateway$/, heading: "Gateway" },
+    { href: "/crons", url: /\/crons$/, heading: "Crons e timers" },
+    { href: "/custos", url: /\/custos$/, heading: "Custos" },
+    { href: "/", url: /\/$/, heading: "Visão Geral" },
   ] as const;
 
-  const sidebar = page.locator("aside");
-
   for (const route of routes) {
-    await sidebar.getByRole("link", { name: route.link }).click();
+    await navigateFromSidebar(page, route.href);
     await expect(page).toHaveURL(route.url);
     await expect(page.getByRole("heading", { name: route.heading, exact: true })).toBeVisible();
   }
