@@ -30,7 +30,7 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: `yarn dev --hostname 127.0.0.1 --port ${testPort}`,
+    command: `yarn dev --webpack --hostname 127.0.0.1 --port ${testPort}`,
     url: `${baseURL}/login`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
