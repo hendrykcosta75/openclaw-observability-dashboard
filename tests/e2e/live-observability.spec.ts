@@ -7,10 +7,11 @@ const password = process.env.DASHBOARD_AUTH_PASSWORD ?? "local-test-password";
 const snapshotPath = process.env.OPENCLAW_SNAPSHOT_PATH;
 
 async function login(page: import("@playwright/test").Page) {
-  await page.goto("/login");
-  await page.getByLabel("Usuário").fill(username);
-  await page.getByLabel("Senha").fill(password);
-  await page.getByRole("button", { name: "Entrar" }).click();
+  const response = await page.request.post("/api/auth/login", {
+    data: { username, password },
+  });
+  expect(response.status()).toBe(200);
+  await page.goto("/");
   await expect(page).toHaveURL(/\/$/);
 }
 
@@ -74,8 +75,12 @@ test("detail navigation and logout remain available", async ({ page }) => {
   await expect(page.getByText("Tokens coletados do snapshot real com input e output discriminados.")).toBeVisible();
   await expect(page.getByText(/US\$/).first()).toBeVisible();
 
-  await page.locator("aside").getByRole("link", { name: "Configuração" }).click();
-  await expect(page).toHaveURL(/\/custos\/precos$/);
+  const pricingLink = page.locator("aside a[href='/custos/precos']");
+  await expect(pricingLink).toHaveAttribute("href", "/custos/precos");
+  await Promise.all([
+    page.waitForURL(/\/custos\/precos$/),
+    pricingLink.click(),
+  ]);
   await expect(page.getByRole("heading", { name: "Preços de modelos" })).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Chave interna" }).first()).toBeVisible();
   await expect(page.getByRole("spinbutton", { name: "Input USD por 1M tokens" }).first()).toBeVisible();

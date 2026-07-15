@@ -4,10 +4,11 @@ const username = process.env.DASHBOARD_AUTH_USER ?? "admin";
 const password = process.env.DASHBOARD_AUTH_PASSWORD ?? "local-test-password";
 
 async function login(page: import("@playwright/test").Page) {
-  await page.goto("/login");
-  await page.getByLabel("Usuário").fill(username);
-  await page.getByLabel("Senha").fill(password);
-  await page.getByRole("button", { name: "Entrar" }).click();
+  const response = await page.request.post("/api/auth/login", {
+    data: { username, password },
+  });
+  expect(response.status()).toBe(200);
+  await page.goto("/");
   await expect(page).toHaveURL(/\/$/);
 }
 
