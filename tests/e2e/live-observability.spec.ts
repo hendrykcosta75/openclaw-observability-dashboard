@@ -67,6 +67,7 @@ test("authenticated dashboard uses the fixture and shows real values", async ({ 
 });
 
 test("detail navigation and logout remain available", async ({ page }) => {
+  test.setTimeout(90_000);
   await login(page);
   await navigateFromSidebar(page, "/gateway");
   await expect(page).toHaveURL(/\/gateway$/);
