@@ -193,7 +193,7 @@ jobs:
             -e ssh \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/ubuntu/openclaw-observability-dashboard/
 
-      - name: Install dependencies, build and restart services
+      - name: Build, restart dashboard, and schedule collector
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<'REMOTE'
             set -euo pipefail
@@ -205,6 +205,7 @@ jobs:
             yarn build
             systemctl --user daemon-reload
             systemctl --user restart openclaw-observability-dashboard.service
+            curl --fail --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:3100/healthz
+            systemctl --user reset-failed openclaw-observability-collector.service
             systemctl --user restart openclaw-observability-collector.timer
-            systemctl --user restart openclaw-observability-collector.service
           REMOTE
