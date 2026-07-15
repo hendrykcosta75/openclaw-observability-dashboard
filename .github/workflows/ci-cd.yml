@@ -103,6 +103,23 @@ jobs:
 
       - name: Scan and wait for the quality gate
         if: steps.sonar.outputs.configured == 'true'
+        id: sonar_scan
+        continue-on-error: true
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.timeout=300
+
+      - name: Wait before retrying a transient SonarQube failure
+        if: steps.sonar_scan.outcome == 'failure'
+        run: sleep 10
+
+      - name: Retry SonarQube scan and wait for the quality gate
+        if: steps.sonar_scan.outcome == 'failure'
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
