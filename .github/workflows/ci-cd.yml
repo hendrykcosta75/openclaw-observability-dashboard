@@ -151,7 +151,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=openclaw-dashboard-image
 
       - name: Scan published image for HIGH/CRITICAL CVEs
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/openclaw-observability-dashboard:sha-${{ github.sha }}
           format: table
